@@ -1,0 +1,81 @@
+#ifndef SHELL_H
+#define SHELL_H
+
+#include <unistd.h>
+#include <sys/wait.h>
+#include <stdlib.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <errno.h>
+#include <string.h>
+#include <stdio.h>
+#include <fcntl.h>
+
+void print_prompt1(void);
+void print_prompt2(void);
+
+extern char **environ;
+
+char *_getenv(const char *name);
+char **token_cmd(char *line);
+//char **getpath(char *path);
+//char *pathconcate(char *token, char *value);
+//int checkcmd_path(char **token, char *value);
+//char* find_path(char **lines);
+void execute(char **argv);
+char *getlocation(char *command);
+
+char *_strncpy(char *dest, char *src, int n);
+char *_strcat(char *dest, char *src);
+char *_memset(char *s, char b, unsigned int n);
+int _strlen(char *s);
+char *_strcpy(char *dest, char *src);
+char *_strdup(char *str);
+int _atoi(char *s);
+int _isalpha(char c);
+
+/* printers */
+int _putchar(int c);
+int print(char *str);
+
+/* freememory */
+
+void free_space_p(char *ptr);
+void freememory_pp(char **ptr);
+int _strcmp(char *s1, char *s2);
+
+
+/**
+ * struct builtin_t structure for builrin commands
+ * @cmd: the command's name
+ * @c: the appropriate function to act on command
+ */
+
+typedef struct  builtin_t{
+
+        char *cmd;
+        int (*function_ptr)(char **, int, char *);
+} builtin_t;
+
+/* builtin function */
+int  env_cmd(char **cmd, int status, char *filename);
+int exit_cmd(char **cmd, int status, char *filename);
+builtin_t is_builtin(char *cmd);
+int (*check_builtins(char **))(char **, int, char *);
+void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
+int cd_cmd(char **cmd, int status, char *filename);
+
+unsigned int is_delim(char c, const char *delim);
+char *_strtok(char *src, const char *delim);
+ssize_t _getline(char **lineptr, size_t *n, int fd);
+int find_exist(const char *name, const char value, int overwrite);
+int _setenv(const char *name, const char *value, int overwrite);
+char *newenv_var(char *name, char *value);
+
+
+/* Macros*/
+#define TRUE 1
+#define FALSE 0
+#define BUFSIZE 1024
+
+#endif
