@@ -50,7 +50,7 @@ char *new_var(const char *name, const char *value)
  * @filename: second argument passed to the command
  * Return: returns 0 on success
  */
-int _setenv(char **args, int num_args, char *filename)
+int _setenv(const char *name, const char *value, int overwrite)
 {
 	char *env = NULL;
 	int i;
@@ -58,7 +58,7 @@ int _setenv(char **args, int num_args, char *filename)
 	char **new_environ;
 	const char *variable;
 	const char *value;
-	(void) filename;
+
 
 	if (num_args != 3)
 	{
@@ -69,7 +69,7 @@ int _setenv(char **args, int num_args, char *filename)
 	value = args[2];
 
 
-	if (find_exist(variable, value) == -1)
+	if (find_exist(name, value) == -1)
 	{
 	envc = 0;
 	while (environ[envc] != NULL)
@@ -86,7 +86,7 @@ int _setenv(char **args, int num_args, char *filename)
 	new_environ[i] = environ[i];
 	}
 
-	new_environ[envc++] = new_var(variable, value);
+	new_environ[envc++] = new_var(name, value);
 	new_environ[envc] = NULL;
 	environ = new_environ;
 

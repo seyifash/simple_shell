@@ -103,3 +103,37 @@ int exit_cmd(char **cmd, int status, char *filename)
 	freememory_pp(cmd);
 	exit(status);
 }
+
+/**
+ * built_setenv - sets an enviromental variable
+ * @cmd: the command entered
+ * @status: unused
+ * @filename: unused
+ * Return:  returns 0 on success;
+ */
+
+int built_setenv(char **cmd, int status, char *filename)
+{
+	char **env = NULL;
+	(void)status;
+	(void)filename;
+
+	if (cmd[1] == NULL || cmd[2] == NULL)
+	{
+	env = environ;
+	while (*env != NULL)
+	{
+	write(STDOUT_FILENO, *env, _strlen(*env));
+	write(STDOUT_FILENO, "\n", 1);
+	env++;
+	}
+	}
+
+	if (_setenv(cmd[1], cmd[2], 1) == -1)
+	{
+	write(STDERR_FILENO, "Failed to set environmental variable\n", 36);
+	return (-1);
+	}
+
+	return (0);
+}
