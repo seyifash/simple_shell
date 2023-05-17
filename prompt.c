@@ -48,13 +48,13 @@ char *_strtok(char *src, const char *delim)
 	{
 	return (NULL);
 	}
-	src += strspn(src, delim);
+	src += _strspn(src, delim);
 	if (*src == '\0')
 	{
 	backup = src;
 	return (NULL);
 	}
-	end = src + strcspn(src, delim);
+	end = src + _strcspn(src, delim);
 	if (*end == '\0')
 	{
 	backup = end;

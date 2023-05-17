@@ -1,28 +1,25 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-
-#define BUFSIZE 1024
+#include "shell.h"
 
 /**
  * cd_cmd - a function that implements the cd buitin cmd
  * @cmd: the command given
- * @status: number of argument
- * @filename: second argument to the command
+ * @status: unused
+ * @filename: unused
  * Return: return 1 on success and -1 on failure
  */
 int cd_cmd(char **cmd, int status, char *filename)
 {
 	char *dire;
 	int tilda, dash, home;
+	(void)status;
+	(void)filename;
 
 	dire = cmd[1];
 	if (dire != NULL)
 	{
-	home = strcmp("$HOME" dire);
-	dash = strcmp("--", dire);
-	tilda = strcmp("~", dire);
+	home = _strcmp("$HOME", dire);
+	dash = _strcmp("--", dire);
+	tilda = _strcmp("~", dire);
 	}
 
 	if (dire == NULL || home || dash || tilda)
@@ -31,22 +28,22 @@ int cd_cmd(char **cmd, int status, char *filename)
 	return (1);
 	}
 
-	if (strcmp(dire, "..") == 0)
+	if (_strcmp(dire, "..") == 0)
 	{
 	change_prevdir(cmd);
 	}
 
-	if (strcmp(dire, "-") == 0)
+	if (_strcmp(dire, "-") == 0)
 	{
 	change_prevdir(cmd);
 	}
-	if (strcmp(dire, ".") == 0)
+	if (_strcmp(dire, ".") == 0)
 	{
 	current_dir(cmd);
 	}
 	else
 	{
-	change_givendir(dire)
+	change_givendir(cmd);
 	}
 
 	return (1);
@@ -55,17 +52,17 @@ int cd_cmd(char **cmd, int status, char *filename)
 
 /**
  * change_homedir - change to the home directory
- * @cmd: the given command
+ * @cmd: unused
  *
  * Return: nothing
  */
 void change_homedir(char **cmd)
 {
 	char *homedir;
-	char *current_dir[BUFSIZE];
 	char initial_dir[BUFSIZE];
+	(void)cmd;
 
-	homedir = getenv("HOME");
+	homedir = _getenv("HOME");
 	if (homedir == NULL)
 	{
 	write(STDERR_FILENO, "Failed to get home directory\n", 29);
@@ -82,13 +79,13 @@ void change_homedir(char **cmd)
 	write(STDERR_FILENO, "cd: Failed to change directory\n", 31);
 	return;
 	}
-	setenv("OLDPWD", initial_dir, 1);
-	setenv("PWD", homedir, 1);
+	_setenv("OLDPWD", initial_dir, 1);
+	_setenv("PWD", homedir, 1);
 }
 
 /**
  * change_prevdir - change from the current dir to the parent dir
- * @cmd: the given command
+ * @cmd: unused
  *
  * Return: nothing
  */
@@ -96,22 +93,23 @@ void change_prevdir(char **cmd)
 {
 	char *prev_dir, *p_pwd;
 	char  initial_dir[BUFSIZE];
+	(void)cmd;
 
 	getcwd(initial_dir, sizeof(initial_dir));
 
-	prev_dir = getenv("OLDPWD");
+	prev_dir = _getenv("OLDPWD");
 	if (prev_dir == NULL)
 	{
 	write(STDERR_FILENO, "Failed to get previous directory\n", 33);
 	return;
 	}
-	setenv("OLDPWD", initial_dir, 1);
+	_setenv("OLDPWD", initial_dir, 1);
 
 	if (chdir(prev_dir) == -1)
-	setenv("PWD", initial_dir, 1);
+	_setenv("PWD", initial_dir, 1);
 	else
-	setenv("PWD", prev_dir, 1);
-	p_pwd = getenv("PWD");
+	_setenv("PWD", prev_dir, 1);
+	p_pwd = _getenv("PWD");
 
 	write(STDOUT_FILENO, p_pwd, strlen(p_pwd));
 	write(STDOUT_FILENO, "\n", 1);
@@ -121,16 +119,17 @@ void change_prevdir(char **cmd)
 
 /**
  * change_givendir - function that change to the given directory
- * @cmd: command given
+ * @cmd: unused
  *
  */
 void change_givendir(char **cmd)
 {
 	char pwd[BUFSIZE];
 	char *dir, *cp_pwd, *cd_dir;
+	(void)cmd;
 
 	getcwd(pwd, sizeof(pwd));
-
+	dir = cmd[1];
 	if (dir == NULL)
 	{
 	perror("No directory provided");
@@ -142,10 +141,10 @@ void change_givendir(char **cmd)
 	perror("chdir");
 	return;
 	}
-	cp_pwd = strdup(pwd);
-	setenv("OLDPWD", cp_pwd, 1);
-	cd_dir = strdup(dir);
-	setenv("PWD", cd_dir, 1);
+	cp_pwd = _strdup(pwd);
+	_setenv("OLDPWD", cp_pwd, 1);
+	cd_dir = _strdup(dir);
+	_setenv("PWD", cd_dir, 1);
 
 	free(cp_pwd);
 	free(cd_dir);
@@ -154,18 +153,19 @@ void change_givendir(char **cmd)
 
 /**
  * current_dir - changes to the current directory
- * @cmd: command entered
+ * @cmd: unused
  *
  */
 void current_dir(char **cmd)
 {
 	char pwd[BUFSIZE];
 	char *cp_pwd;
+	(void)cmd;
 
 	getcwd(pwd, sizeof(pwd));
 
-	cp_pwd = strdup(pwd);
-	setenv("OLDPWD", cp_pwd, 1);
+	cp_pwd = _strdup(pwd);
+	_setenv("OLDPWD", cp_pwd, 1);
 	free(cp_pwd);
 
 	if (chdir(".") == -1)
@@ -175,5 +175,5 @@ void current_dir(char **cmd)
 	}
 
 	getcwd(pwd, sizeof(pwd));
-	setenv("PWD", pwd, 1);
+	_setenv("PWD", pwd, 1);
 }

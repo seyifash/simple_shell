@@ -69,4 +69,51 @@ char *getlocation(char *command)
 	}
 	return (NULL);
 	}
+
+	return (NULL);
+}
+/**
+ * token_cmd - tokenizes the string
+ * @line: the string to be tokenize
+ *
+ * Return: returns the tokenized string
+ */
+
+char **token_cmd(char *line)
+{
+
+	char *cmd_cpy = NULL;
+	char *token = NULL;
+	char *delim = " \n";
+	int argc = 0, i = 0;
+	char **argv = NULL;
+
+	cmd_cpy = _strdup(line);
+	token = _strtok(line, delim);
+	while (token != NULL)
+	{
+	argc++;
+	token = _strtok(NULL, delim);
+	}
+
+	argv = malloc(sizeof(char *) * (argc + 1));
+	if(!argv)
+	{
+	write(STDERR_FILENO, "Error: malloc failed\n", 21);
+	exit(1);
+	}
+
+	token = _strtok(cmd_cpy, delim);
+
+	while (token != NULL)
+	{
+	argv[i] = _strdup(token);
+	i++;
+	token = _strtok(NULL, delim);
+	}
+	argv[i] = NULL;
+
+	free(cmd_cpy);
+
+	return argv;
 }

@@ -18,13 +18,12 @@ extern char **environ;
 
 char *_getenv(const char *name);
 char **token_cmd(char *line);
-//char **getpath(char *path);
-//char *pathconcate(char *token, char *value);
-//int checkcmd_path(char **token, char *value);
-//char* find_path(char **lines);
 void execute(char **argv);
 char *getlocation(char *command);
 
+int _strncmp(char *s1, char *s2, int n);
+size_t _strcspn(const char *str, const char *delim);
+int _strspn(char *str, const char *acc);
 char *_strncpy(char *dest, char *src, int n);
 char *_strcat(char *dest, char *src);
 char *_memset(char *s, char b, unsigned int n);
@@ -33,12 +32,11 @@ char *_strcpy(char *dest, char *src);
 char *_strdup(char *str);
 int _atoi(char *s);
 int _isalpha(char c);
+void _memcpy(void *dest, void *src, unsigned int n);
 
-/* printers */
 int _putchar(int c);
 int print(char *str);
 
-/* freememory */
 
 void free_space_p(char *ptr);
 void freememory_pp(char **ptr);
@@ -57,23 +55,28 @@ typedef struct  builtin_t{
         int (*function_ptr)(char **, int, char *);
 } builtin_t;
 
-/* builtin function */
+
+int builtin_unset(char **cmd, int status, char *filename);
 int  env_cmd(char **cmd, int status, char *filename);
 int exit_cmd(char **cmd, int status, char *filename);
+int built_setenv(char **cmd, int status, char *filename);
 builtin_t is_builtin(char *cmd);
 int (*check_builtins(char **))(char **, int, char *);
 void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
 int cd_cmd(char **cmd, int status, char *filename);
+void current_dir(char **cmd);
+void change_givendir(char **cmd);
+void change_prevdir(char **cmd);
+void change_homedir(char **cmd);
 
 unsigned int is_delim(char c, const char *delim);
 char *_strtok(char *src, const char *delim);
 ssize_t _getline(char **lineptr, size_t *n, int fd);
-int find_exist(const char *name, const char value, int overwrite);
-int _setenv(const char *name, const char *value, int overwrite);
-char *newenv_var(char *name, char *value);
+int find_exist( char *name, char *value, int overwrite);
+char *new_var(char *name, char *value);
+int _setenv(char *name, char *value, int overwrite);
 
 
-/* Macros*/
 #define TRUE 1
 #define FALSE 0
 #define BUFSIZE 1024

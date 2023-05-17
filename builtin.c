@@ -14,6 +14,7 @@ builtin_t is_builtin(char *cmd)
 	{"env", env_cmd},
 	{"cd", cd_cmd},
 	{"setenv", built_setenv},
+	{"unsetenv", builtin_unset},
 	{NULL, NULL}
 	};
 
@@ -128,8 +129,7 @@ int built_setenv(char **cmd, int status, char *filename)
 	env++;
 	}
 	}
-
-	if (_setenv(cmd[1], cmd[2], 1) == -1)
+	else if (_setenv(cmd[1], cmd[2], 1) == -1)
 	{
 	write(STDERR_FILENO, "Failed to set environmental variable\n", 36);
 	return (-1);
