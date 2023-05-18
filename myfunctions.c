@@ -50,7 +50,6 @@ char *getlocation(char *command)
 	_strcpy(file_path, path_token);
 	_strcat(file_path, "/");
 	_strcat(file_path, command);
-	_strcat(file_path, "\0");
 	if (stat(file_path, &buffer) == 0)
 	{
 	free(path_copy);
@@ -67,7 +66,6 @@ char *getlocation(char *command)
 	{
 	return (command);
 	}
-	return (NULL);
 	}
 
 	return (NULL);
@@ -85,19 +83,19 @@ char **token_cmd(char *line)
 	char *cmd_cpy = NULL;
 	char *token = NULL;
 	char *delim = " \n";
-	int argc = 0, i = 0;
-	char **argv = NULL;
+	int args = 0, i;
+	char **cmd_toks = NULL;
 
 	cmd_cpy = _strdup(line);
 	token = _strtok(line, delim);
 	while (token != NULL)
 	{
-	argc++;
+	args++;
 	token = _strtok(NULL, delim);
 	}
 
-	argv = malloc(sizeof(char *) * (argc + 1));
-	if(!argv)
+	cmd_toks = malloc(sizeof(char *) * (args + 1));
+	if(!cmd_toks)
 	{
 	write(STDERR_FILENO, "Error: malloc failed\n", 21);
 	exit(1);
@@ -105,15 +103,15 @@ char **token_cmd(char *line)
 
 	token = _strtok(cmd_cpy, delim);
 
-	while (token != NULL)
+	for(i = 0; token != NULL; i++)
 	{
-	argv[i] = _strdup(token);
-	i++;
+	cmd_toks[i] = malloc(sizeof(char) * _strlen(token));
+	_strcpy(cmd_toks[i], token);
 	token = _strtok(NULL, delim);
 	}
-	argv[i] = NULL;
+	cmd_toks[i] = NULL;
 
 	free(cmd_cpy);
 
-	return argv;
+	return cmd_toks;
 }

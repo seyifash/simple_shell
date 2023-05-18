@@ -49,6 +49,8 @@ char *_strtok(char *src, const char *delim)
 	return (NULL);
 	}
 	src += _strspn(src, delim);
+	while (*src != '\0' && is_delim(*src, delim))
+        ++src;
 	if (*src == '\0')
 	{
 	backup = src;
@@ -92,9 +94,14 @@ void free_space_p(char *ptr)
 
 void freememory_pp(char **ptr)
 {
-	char **tmp;
+	int i;
 
-	for (tmp = ptr; *tmp != NULL; tmp++)
-	free_space_p(*tmp);
-	free(ptr);
+	if (ptr == NULL)
+	return ;
+
+	for (i = 0; ptr[i] != NULL; i++)
+	{
+	free(ptr[i]);
+	}
+	free(ptr); 
 }

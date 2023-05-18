@@ -21,7 +21,6 @@ builtin_t is_builtin(char *cmd)
 	for (i = 0; builtincommands[i].cmd != NULL; i++)
 	if (_strcmp(builtincommands[i].cmd, cmd) == 0)
 	return (builtincommands[i]);
-
 	return (builtincommands[i]);
 }
 /**
@@ -77,14 +76,14 @@ int env_cmd(char **cmd, int status, char *filename)
 
 int exit_cmd(char **cmd, int status, char *filename)
 {
-	int i = 0;
+	int i;
+	status = 0;
 
-	if (!cmd[i])
+	if (cmd[0])
 	{
-	freememory_pp(cmd);
-	exit(status);
-	}
-
+	if (cmd[1])
+	{
+	i = 0;
 	while (cmd[1][i])
 	{
 	if (_isalpha(cmd[1][i]) && cmd[1][i] != '-')
@@ -101,8 +100,15 @@ int exit_cmd(char **cmd, int status, char *filename)
 	i++;
 	}
 	status = _atoi(cmd[1]);
+	}
 	freememory_pp(cmd);
 	exit(status);
+	}
+	else
+	{
+	freememory_pp(cmd);
+	exit(status);
+	}
 }
 
 /**

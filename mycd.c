@@ -58,29 +58,29 @@ int cd_cmd(char **cmd, int status, char *filename)
  */
 void change_homedir(char **cmd)
 {
-	char *homedir;
+	char *homedir, *dup_pwd;
 	char initial_dir[BUFSIZE];
 	(void)cmd;
 
+	getcwd(initial_dir, sizeof(initial_dir));
+	dup_pwd = _strdup(initial_dir);
 	homedir = _getenv("HOME");
 	if (homedir == NULL)
 	{
-	write(STDERR_FILENO, "Failed to get home directory\n", 29);
-	return;
-	}
-	if (getcwd(initial_dir, sizeof(initial_dir)) == NULL)
-	{
-	write(STDERR_FILENO, "Failed to get current directory\n", 32);
+	_setenv("OLDPWD", dup_pwd, 1);
+	free(dup_pwd);
 	return;
 	}
 
 	if (chdir(homedir) == -1)
 	{
 	write(STDERR_FILENO, "cd: Failed to change directory\n", 31);
+	free(dup_pwd);
 	return;
 	}
-	_setenv("OLDPWD", initial_dir, 1);
+	_setenv("OLDPWD", dup_pwd, 1);
 	_setenv("PWD", homedir, 1);
+	free(dup_pwd);
 }
 
 /**

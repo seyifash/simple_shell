@@ -1,0 +1,275 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <sys/stat.h>
+#include "shell.h"
+
+#define BUFSIZE 1024
+/**char **token_cmd(char *line);
+char *getlocation(char *command);
+char *_strncpy(char *dest, char *src, int n);
+void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
+ssize_t _getline(char **line, size_t *n, int fd);*/
+
+int main()
+{
+
+        char *line = NULL;
+        size_t n = 0;
+        ssize_t lineread;
+        char *delim = " \n";
+	char *command = NULL; char *actual_command = NULL;
+
+        printf("Enter a line of text:\n");
+        lineread = _getline(&line, &n, STDIN_FILENO);
+
+                                if (lineread == -1) {
+        printf("Error reading input.\n");
+        return -1;
+        }
+
+        printf("Input: %s", line);
+	char *var = _strdup(line);
+	 char *portion = _strtok(line, delim);
+        while (portion != NULL)
+        {
+        printf("%s\n", portion);
+        portion = _strtok(NULL, delim);
+        }
+        for (int i = 0;i < 15; i++)
+                if (line[i] == '\0')
+                        printf("\\0\n");
+                else
+                printf("Character: %c | ASCII Value: %d\n", line[i], line[i]);
+        char **token = token_cmd(var);
+         command = token[0];
+        actual_command = getlocation(command);
+        if (actual_command != NULL)
+        {
+        printf("Actual Command: %s\n", actual_command);
+         printf("ASCII Values:\n");
+	for (int i = 0; actual_command[i] != '\0'; i++) 
+	{
+        printf("Character: %c | ASCII Value: %d\n", actual_command[i], actual_command[i]);
+	}
+
+	}
+	        else
+        {
+        printf("Unable to determine actual command.\n");
+        }
+	printf("Tokens:\n");
+    for (int i = 0; token[i] != NULL; i++) {
+        printf("%s\n", token[i]);
+    }
+	execve(actual_command, token, NULL);
+
+        free(line);
+        free(token);
+        return 0;
+}
+
+/**ssize_t _getline(char **line, size_t *n, int fd)
+{
+        static char buffer[BUFSIZE];
+        ssize_t charsread = 0;
+        ssize_t totalread = 0;
+        size_t rd;
+
+        if (line == NULL || *n >= 0)
+        {
+        *line = malloc(BUFSIZE);
+        if (*line == NULL)
+        {
+        return (-1);
+        }
+        *n = BUFSIZE;
+        }
+        (*line)[0] = '\0';
+        while (1)
+	        {
+        rd = read(fd, buffer, BUFSIZE);
+        if (rd == -1)
+        return (-1);
+        if (rd == 0)
+        break;
+        charsread += rd;
+        totalread += rd;
+        if (charsread >= *n - 1)
+        {
+        do {
+        *n *= 2;
+        } while (charsread >= *n - 1);
+        *line = _realloc(*line, *n/2, *n);
+        if (*line == NULL)
+        {
+        return (-1);
+        }
+        }
+        _strncpy(*line + totalread - rd, buffer, rd);
+        if (buffer[rd - 1] == '\n')
+        break;
+        }
+        (*line)[totalread] = '\0';
+        return (totalread);
+}*/
+/**void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
+{
+        char *ptr1;
+	        char *old_ptr;
+        unsigned int i;
+
+        if (new_size == old_size)
+        return (ptr);
+
+        if (new_size == 0 && ptr)
+        {
+        free(ptr);
+        return (NULL);
+        }
+        if (!ptr)
+        return (malloc(new_size));
+        ptr1 = malloc(new_size);
+        if (!ptr1)
+        return (NULL);
+        old_ptr = ptr;
+        if (new_size < old_size)
+        {
+        for (i = 0; i < new_size; i++)
+                ptr1[i] = old_ptr[i];
+        }
+        if (new_size > old_size)
+        {
+        for (i = 0; i < old_size; i++)
+        ptr1[i] = old_ptr[i];
+        }
+        free(ptr);
+        return (ptr1);
+	}
+/**char *_strncpy(char *dest, char *src, int n)
+{
+         int j = 0;
+
+        while (j < n && src[j] != '\0')
+        {
+        dest[j] = src[j];
+        j++;
+        }
+        while (j < n)
+        {
+        dest[j] = '\0';
+        j++;
+        }
+        return (dest);
+}
+char *_strtok(char *src, const char *delim)
+{
+        static char *backup;
+        char *token = NULL;
+        char *end = NULL;
+
+         if (src == NULL)
+        {
+        src = backup;
+        }
+        if (src == NULL)
+        {
+	        return (NULL);
+        }
+         src += _strspn(src, delim);
+         if (*src == '\0')
+         {
+        backup = src;
+        return (NULL);
+        }
+         end = src + _strcspn(src, delim);
+         if (*end == '\0')
+         {
+         backup = end;
+         }
+         else
+        {
+        *end = '\0';
+        backup = end + 1;
+        }
+        token = src;
+        return (token);
+}
+
+char *getlocation(char *command)
+{
+        char *path, *path_copy, *path_token, *file_path;
+        int command_length, directory_length;
+        struct stat buffer;
+
+        path = _getenv("PATH");
+        if (path)
+        {
+        path_copy = _strdup(path);
+        command_length = _strlen(command);
+        path_token = _strtok(path_copy, ":");
+        while (path_token != NULL)
+        {
+        directory_length = _strlen(path_token);
+        file_path = malloc(command_length + directory_length + 2);
+        strcpy(file_path, path_token);
+        strcat(file_path, "/");
+        strcat(file_path, command);
+        
+        if (stat(file_path, &buffer) == 0)
+        {
+        free(path_copy);
+        return (file_path);
+        }
+        else
+        {
+        free(file_path);
+        path_token = _strtok(NULL, ":");
+	        }
+        }
+        free(path_copy);
+        if (stat(command, &buffer) == 0)
+        {
+        return (command);
+        }
+        return (NULL);
+        }
+}
+char **token_cmd(char *line)
+{
+        size_t n = 10;
+        char *cmd_cpy = NULL;
+        char *token = NULL;
+        char *delim = " \n";
+        int argc = 0, i = 0;
+        char **argv = NULL;
+
+        cmd_cpy = _strdup(line);
+        token = _strtok(line, delim);
+        while (token != NULL)
+        {
+        argc++;
+        token = _strtok(NULL, delim);
+        }
+
+        argv = malloc(sizeof(char *) * (argc + 1));
+        if(!argv)
+        {
+                printf("Error: malloc failed\n");
+                exit(1);
+        }
+
+        token = _strtok(cmd_cpy, delim);
+	        while (token != NULL)
+        {
+        argv[i] = _strdup(token);
+        i++;
+        token = _strtok(NULL, delim);
+        }
+        argv[i] = NULL;
+
+         free(cmd_cpy);
+
+        return argv;
+}*/

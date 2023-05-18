@@ -14,6 +14,8 @@ ssize_t _getline(char **line, size_t *n, int fd)
 	ssize_t charsread = 0;
 	ssize_t totalread = 0;
 	ssize_t rd;
+	size_t new_size = 0;
+	char * new_line = NULL;
 
 	if (line == NULL || (int)*n >= 0)
 	{
@@ -36,14 +38,17 @@ ssize_t _getline(char **line, size_t *n, int fd)
 	totalread += rd;
 	if ((size_t)charsread >= *n - 1)
 	{
-	do {
-	*n *= 2;
-	} while ((size_t)charsread >= *n - 1);
-	*line = _realloc(*line, *n / 2, *n);
-	if (*line == NULL)
+	new_size = *n * 2;
+	new_line = _realloc(*line, *n, new_size);
+	
+	if (new_line == NULL)
 	{
+	free(*line);
+	*line = NULL;
 	return (-1);
 	}
+	*line = new_line;
+	*n = new_size;
 	}
 	_strncpy(*line + totalread - rd, buffer, rd);
 	if (buffer[rd - 1] == '\n')
@@ -57,45 +62,24 @@ ssize_t _getline(char **line, size_t *n, int fd)
  * @argv: the command to be executed
  *
  */
-void execute(char **cmd)
+void execute(char *cmd)
 {
-	pid_t pid;
-	int status;
+	char **argv;
 	char *command = NULL, *actual_command = NULL;
 
-	pid = fork();
-
-	if (pid == -1)
-	{
-	perror("Error");
-	exit (EXIT_FAILURE);
-	}
-	if (pid == 0)
-	{
-
-	if (cmd)
-	{
-	command = cmd[0];
+	argv = token_cmd(cmd);
+	command = argv[0];
 	actual_command = getlocation(command);
-	if (execve(actual_command, cmd, environ) == -1)
+	if (access(actual_command, F_OK | R_OK | X_OK) == 0)
 	{
-	perror("Error");
-	exit(EXIT_FAILURE);
-	}
-	}
-	exit(EXIT_SUCCESS);
+	printf("File is accessible: %s\n", actual_command);
 	}
 	else
 	{
-	if (wait(&status) == -1)
-	{
-	perror("wait failed");
-	exit(EXIT_FAILURE);
+	printf("File is not accessible: %s\n", actual_command);
 	}
-
-	if (WIFEXITED(status))
-	exit(WEXITSTATUS(status));
-	}
+	execve(actual_command, argv, environ);
+	freememory_pp(argv);
 }
 /**
  * _memcpy - copies info
@@ -113,3 +97,26 @@ void _memcpy(void *dest, void *src, unsigned int n)
 	for (i = 0; i < n; i++)
 	char_dest[i] = char_src[i];
 }
+/**
+ * is_accessible - checks if a file is accessible
+ * @actual_commmand: the file to be checked
+ *
+ * Returns: 0 0n success and 1 0n failure
+ */
+int is_accessible(char *actual_command)
+{
+    if (access(actual_command, F_OK) == 0)
+	{
+	if (access(actual_command, R_OK | X_OK) == 0) 
+	{
+	return 1;
+	}
+	else
+	{
+	return 0;
+	}
+	}
+	 return 0;
+}
+
+

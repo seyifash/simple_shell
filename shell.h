@@ -16,9 +16,11 @@ void print_prompt2(void);
 
 extern char **environ;
 
+int shell();
+int is_accessible(char *actual_command);
 char *_getenv(const char *name);
 char **token_cmd(char *line);
-void execute(char **argv);
+void execute(char *argv);
 char *getlocation(char *command);
 
 int _strncmp(char *s1, char *s2, int n);
