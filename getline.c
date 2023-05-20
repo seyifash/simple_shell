@@ -52,11 +52,11 @@ ssize_t _getline(char **line, size_t *n, int fd)
 	return (totalread);
 }
 /**
- * execute - function that executes the given command
+ * executeid - function that executes the given command
  * @cmd: the command to be executed
  *
  */
-void execute(char *cmd)
+void executeid(char *cmd)
 {
 	char **argv;
 	char *command = NULL, *actual_command = NULL;

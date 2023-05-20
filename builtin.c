@@ -32,11 +32,14 @@ builtin_t is_builtin(char *cmd)
 
 int (*check_builtins(char **cmd))(char **, int, char *)
 {
-	builtin_t func = is_builtin(cmd[0]);
+	 builtin_t func;
+	func = is_builtin(cmd[0]);
 
 	if (func.cmd)
 	return (func.function_ptr);
+	
 	return (NULL);
+
 }
 
 /**

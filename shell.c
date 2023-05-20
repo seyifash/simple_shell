@@ -25,8 +25,6 @@ int shell(void)
 	return (-1);
 	cmd_cpy = _strdup(line);
 	tokens = token_cmd(cmd_cpy);
-	if (!tokens || !tokens[0])
-		continue;
 	builtin_func = check_builtins(tokens);
 	if (builtin_func)
 	{
@@ -45,7 +43,7 @@ int shell(void)
 	}
 	else if (wpid == 0)
 	{
-	handle_exec_cmd(line);
+	handle_cmd(line);
 	exit(0);
 	}
 	if (waitpid(wpid, &wstatus, 0) == -1)

@@ -115,59 +115,22 @@ char **token_cmd(char *line)
 
 	return cmd_toks;
 }
+
 /**
- * cmdsep_exec - handles commands with seperators and executes them
- * @input: the commands to be executed
- *
+ * _strchr - function checks for the first occurence of a character in a string
+ * @str: the string to be searched
+ * @c: the string to search
+ * Return: returnsremaining portion of string if found else NULL
  */
-void cmdsep_exec(char *input)
+
+char *_strchr(const char *str, int  c)
 {
-	char* delim = ";||&&";
-	char* token = strtok(input, delim);
-	pid_t pid;
-	int status;
 
-	while (token != NULL) {
-	pid = fork();
-	if (pid == 0)
+	while (*str != '\0')
 	{
-	execute(token);
+	if (*str == c)
+	return ((char *)(str));
+	str++;
 	}
-	else if (pid > 0)
-	{
-	waitpid(pid, &status, 0);
-        }
-	else
-	{
-	perror("Fork failed");
-	exit(1);
-	}
-
-	token = strtok(NULL, delim);
-	}
-
-}
-/**
- * handle_exec_cmd - checkes if a command is seperated by seperators
- * @input: the commands entered
- *
- */
-void handle_exec_cmd(char *input)
-{
-	if (strstr(input, ";") != NULL)
-	{
-	cmdsep_exec(input);
-	}
-	else if (strstr(input, "||") != NULL)
-	{
-		cmdsep_exec(input);
-	}
-	else if (strstr(input, "&&") != NULL)
-	{
-		cmdsep_exec(input);
-	}
-	else
-	{
-        execute(input);
-	}
+	return (NULL);
 }
