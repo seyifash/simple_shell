@@ -21,6 +21,8 @@ int is_accessible(char *actual_command);
 char *_getenv(const char *name);
 char **token_cmd(char *line);
 void execute(char *argv);
+void handle_exec_cmd(char *input);
+void cmdsep_exec(char *input);
 char *getlocation(char *command);
 
 int _strncmp(char *s1, char *s2, int n);

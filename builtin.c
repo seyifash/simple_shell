@@ -79,10 +79,12 @@ int exit_cmd(char **cmd, int status, char *filename)
 	int i;
 	status = 0;
 
-	if (cmd[0])
+	if (!cmd[1])
 	{
-	if (cmd[1])
-	{
+	freememory_pp(cmd);
+	exit(status);
+	}
+
 	i = 0;
 	while (cmd[1][i])
 	{
@@ -100,15 +102,9 @@ int exit_cmd(char **cmd, int status, char *filename)
 	i++;
 	}
 	status = _atoi(cmd[1]);
-	}
 	freememory_pp(cmd);
 	exit(status);
-	}
-	else
-	{
-	freememory_pp(cmd);
-	exit(status);
-	}
+	
 }
 
 /**

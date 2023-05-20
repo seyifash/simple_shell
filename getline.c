@@ -11,22 +11,17 @@
 ssize_t _getline(char **line, size_t *n, int fd)
 {
 	static char buffer[BUFSIZE];
-	ssize_t charsread = 0;
-	ssize_t totalread = 0;
-	ssize_t rd;
+	ssize_t charsread = 0, totalread = 0, rd = 0;
 	size_t new_size = 0;
-	char * new_line = NULL;
+	char  *new_line = NULL;
 
 	if (line == NULL || (int)*n >= 0)
 	{
 	*n = BUFSIZE;
 	*line = malloc(*n);
 	if (*line == NULL)
-	{
 	return (-1);
 	}
-	}
-	
 	while (1)
 	{
 	rd = read(fd, buffer, BUFSIZE);
@@ -40,7 +35,6 @@ ssize_t _getline(char **line, size_t *n, int fd)
 	{
 	new_size = *n * 2;
 	new_line = _realloc(*line, *n, new_size);
-	
 	if (new_line == NULL)
 	{
 	free(*line);
@@ -59,7 +53,7 @@ ssize_t _getline(char **line, size_t *n, int fd)
 }
 /**
  * execute - function that executes the given command
- * @argv: the command to be executed
+ * @cmd: the command to be executed
  *
  */
 void execute(char *cmd)
@@ -70,21 +64,15 @@ void execute(char *cmd)
 	argv = token_cmd(cmd);
 	command = argv[0];
 	actual_command = getlocation(command);
-	if (access(actual_command, F_OK | R_OK | X_OK) == 0)
-	{
-	printf("File is accessible: %s\n", actual_command);
-	}
-	else
-	{
-	printf("File is not accessible: %s\n", actual_command);
-	}
 	execve(actual_command, argv, environ);
 	freememory_pp(argv);
+	free(actual_command);
+	free(cmd);
 }
 /**
  * _memcpy - copies info
- * @newptr: destination
- * @ptr: source
+ * @dest: destination
+ * @src: source
  * @n: size
  * Return: nth - returns nth
  */
@@ -99,24 +87,24 @@ void _memcpy(void *dest, void *src, unsigned int n)
 }
 /**
  * is_accessible - checks if a file is accessible
- * @actual_commmand: the file to be checked
+ * @actual_command: the file to be checked
  *
- * Returns: 0 0n success and 1 0n failure
+ * Return: 0 0n success and 1 0n failure
  */
 int is_accessible(char *actual_command)
 {
-    if (access(actual_command, F_OK) == 0)
+	if (access(actual_command, F_OK) == 0)
 	{
-	if (access(actual_command, R_OK | X_OK) == 0) 
+	if (access(actual_command, R_OK | X_OK) == 0)
 	{
-	return 1;
+	return (1);
 	}
 	else
 	{
-	return 0;
+	return (0);
 	}
 	}
-	 return 0;
+	return (0);
 }
 
 
