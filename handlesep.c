@@ -118,11 +118,11 @@ void handle_cmd(char *input)
 	{
 	execute_sep(input);
 	}
-	else if (strstr(input, "&&") != NULL) 
+	else if (_strstr(input, "&&") != NULL) 
 	{
 	execute_and(input);
 	}
-	else if (strstr(input, "||") != NULL) 
+	else if (_strstr(input, "||") != NULL) 
 	{
 	if (checkcmdsame(input)) 
 	{
@@ -177,14 +177,14 @@ int checkcmdsame(char *input)
 	char *cmd_cpy = _strdup(input);
 	char *cmd_token;
 	char *first_command = NULL;
-	int same_operator = 1;
+	int same_commands = 1;
 
 	cmd_token = _strtok(cmd_cpy, delim);
-	first_command = strdup(cmd_token);
+	first_command = _strdup(cmd_token);
 	
 	while (cmd_token != NULL) {
 	if (_strcmp(cmd_token, first_command) != 0) {
-	same_operator = 0;
+	same_commands = 0;
 	break;
 	}
 	cmd_token = _strtok(NULL, delim);
@@ -192,5 +192,5 @@ int checkcmdsame(char *input)
 
 	free(cmd_cpy);
 	free(first_command);
-	return same_operator;
+	return same_commands;
 }

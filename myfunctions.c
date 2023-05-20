@@ -134,3 +134,28 @@ char *_strchr(const char *str, int  c)
 	}
 	return (NULL);
 }
+/**
+ * _strstr - searches for the first occurence of a string in anothr string
+ * @haystack: the string in which the search occurs
+ * @needle: the string to be searched for
+ * Return: returns the substring if the needles is found else null
+ */
+char* _strstr(const char* haystack, const char* needle)
+{
+	int i, j;
+
+	for (i = 0; haystack[i] != '\0'; i++)
+	{
+	j = 0;
+	while (needle[j] != '\0' && haystack[i + j] == needle[j])
+	{
+	j++;
+	}
+	if (needle[j] == '\0')
+	{
+	return (char*)&haystack[i];
+	}
+	}
+
+	return NULL;
+}

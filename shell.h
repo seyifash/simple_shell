@@ -39,6 +39,7 @@ char *_memset(char *s, char b, unsigned int n);
 int _strlen(char *s);
 char *_strchr(const char *str, int c);
 char *_strcpy(char *dest, char *src);
+char* _strstr(const char* haystack, const char* needle);
 char *_strdup(char *str);
 int _atoi(char *s);
 int _isalpha(char c);
