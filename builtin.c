@@ -15,6 +15,7 @@ builtin_t is_builtin(char *cmd)
 	{"cd", cd_cmd},
 	{"setenv", built_setenv},
 	{"unsetenv", builtin_unset},
+	{"alias", aliasfunc},
 	{NULL, NULL}
 	};
 

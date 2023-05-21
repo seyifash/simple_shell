@@ -138,33 +138,6 @@ void handle_cmd(char *input)
 	execute(input);
 	}
 }
-void cmdsep_exec(char *input)
-{
-        char* delim = ";||&&";
-        char* token = strtok(input, delim);
-        pid_t pid;
-        int status;
-
-        while (token != NULL) {
-        pid = fork();
-        if (pid == 0)
-        {
-        execute(token);
-        }
-        else if (pid > 0)
-        {
-        waitpid(pid, &status, 0);
-        }
-        else
-        {
-        perror("Fork failed");
-        exit(1);
-        }
-
-        token = strtok(NULL, delim);
-        }
-
-}
 /**
  * checkcmdsame - check if the commands are the same
  * @input: the cmd entered
