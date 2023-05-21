@@ -29,6 +29,10 @@ void execute_or(char *input);
 void execute_and(char *input);
 void execute_sep(char *input);
 int checkcmdsame(char *input);
+void aliasvalue(char *aliasName);
+void setalias(char **tokens);
+int aliasfunc(char **token, int status, char *filename);
+void all_aliases();
 
 int _strncmp(char *s1, char *s2, int n);
 size_t _strcspn(const char *str, const char *delim);
@@ -91,5 +95,7 @@ int _setenv(char *name, char *value, int overwrite);
 #define TRUE 1
 #define FALSE 0
 #define BUFSIZE 1024
+#define ALEN 100
+#define VLEN 100
 
 #endif
