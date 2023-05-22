@@ -1,9 +1,8 @@
 #include "shell.h"
 #include <stdio.h>
 
-int main()
+int main(void)
 {
-
-	shell();
-	return (0);
+shell();
+return (0);
 }
