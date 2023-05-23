@@ -1,4 +1,7 @@
 #include "shell.h"
+char aliases[ALEN][VLEN];
+char values[ALEN][VLEN];
+int aliasCount = 0;
 /**
  * all_aliases - prints all alias
  *
@@ -103,7 +106,7 @@ void aliasvalue(char *aliasName)
 	{
 	_strcpy(output, aliasName);
 	_strcat(output, "=");
-	_strcat(output, aliasValue);
+	_strcat(output, aliasVal);
 	write(STDOUT_FILENO, output, _strlen(output));
 	write(STDOUT_FILENO, "\n", 1);
 	}
