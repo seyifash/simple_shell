@@ -89,7 +89,7 @@ char **token_cmd(char *line)
 	}
 
 	cmd_toks = malloc(sizeof(char *) * (args + 1));
-	if(!cmd_toks)
+	if (!cmd_toks)
 	{
 	write(STDERR_FILENO, "Error: malloc failed\n", 21);
 	exit(1);
@@ -97,7 +97,7 @@ char **token_cmd(char *line)
 
 	token = _strtok(cmd_cpy, delim);
 
-	for(i = 0; token != NULL; i++)
+	for (i = 0; token != NULL; i++)
 	{
 	cmd_toks[i] = malloc(sizeof(char) * (_strlen(token) + 1));
 	_strcpy(cmd_toks[i], token);
@@ -107,7 +107,7 @@ char **token_cmd(char *line)
 
 	free(cmd_cpy);
 
-	return cmd_toks;
+	return (cmd_toks);
 }
 /**
 * _strchr - function checks for the first occurrence of a character in a string
@@ -146,6 +146,7 @@ j++;
 if (needle[j] == '\0')
 {
 return ((char *)&haystack[i]);
+}
 }
 return (NULL);
 }

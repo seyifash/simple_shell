@@ -68,9 +68,9 @@ int i = 0;
 int flag = 0;
 int d = 0, n = 0, digit;
 len = 0;
-while (s[len] != '\0');
-len++;
+while (s[len] != '\0')
 {
+len++;
 }
 while (i < len && flag == 0)
 {

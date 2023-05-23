@@ -1,16 +1,10 @@
 #include "shell.h"
-
-
-char aliases[ALEN][VLEN];
-char values[ALEN][VLEN];
-int aliasCount = 0;
-
 /**
- * all-aliases - prints all alias
+ * all_aliases - prints all alias
  *
  */
 
-void all_aliases()
+void all_aliases(void)
 {
 	char output[1000];
 	int i;
@@ -88,25 +82,26 @@ aliasCount++;
 }
 /**
  * aliasvalue - checks for the value assigned to a name
- * @alaisName: the name for the alias to be checked
+ * @aliasName: the name for the alias to be checked
  *
  */
-void aliasvalue(char *aliasName) 
+void aliasvalue(char *aliasName)
 {
-	char *aliasValue = NULL;
+	char *aliasVal = NULL;
 	char output[ALEN + VLEN + 2];
 	int i;
 
-	for (i = 0; i < aliasCount; i++) {
-        if (_strcmp(aliases[i], aliasName) == 0) {
-            aliasValue = values[i];
-            break;
-	}
-	}
-    
-	if (aliasValue != NULL)
+	for (i = 0; i < aliasCount; i++)
 	{
-	_strcpy(output, aliasName);	
+	if (_strcmp(aliases[i], aliasName) == 0)
+	{
+	aliasVal = values[i];
+	break;
+	}
+	}
+	if (aliasVal != NULL)
+	{
+	_strcpy(output, aliasName);
 	_strcat(output, "=");
 	_strcat(output, aliasValue);
 	write(STDOUT_FILENO, output, _strlen(output));

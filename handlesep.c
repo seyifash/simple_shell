@@ -39,7 +39,7 @@ int execute(char *cmd)
 	command = md[0];
 	actual_command = getlocation(command);
 	execve(actual_command, md, environ);
-	perror("Execution failed");
+	printerror(cmd);
 	exit(1);
 	}
 	else if (pid > 0)
@@ -105,7 +105,7 @@ void execute_or(char *input)
 	{
 	space = exspaces(cmd_toks);
 	if (presame && pretok != NULL &&
-	_strcmp(prevtok, space) == 0 && ini_exec == 0)
+	_strcmp(pretok, space) == 0 && ini_exec == 0)
 	{
 	break;
 	}

@@ -62,3 +62,29 @@ int builtin_unset(char **cmd, int status, char *filename)
 	}
 	return (0);
 }
+/**
+ * current_dir - changes to the current directory
+ * @cmd: unused
+ *
+ */
+void current_dir(char **cmd)
+{
+	char pwd[BUFSIZE];
+	char *cp_pwd;
+	(void)cmd;
+
+	getcwd(pwd, sizeof(pwd));
+
+	cp_pwd = _strdup(pwd);
+	_setenv("OLDPWD", cp_pwd, 1);
+	free(cp_pwd);
+
+	if (chdir(".") == -1)
+	{
+	perror("chdir");
+	return;
+	}
+
+	getcwd(pwd, sizeof(pwd));
+	_setenv("PWD", pwd, 1);
+}

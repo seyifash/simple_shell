@@ -18,6 +18,7 @@ extern char **environ;
 
 
 int shell();
+char *printerror(char *cmd);
 char *_getenv(const char *name);
 char **token_cmd(char *line);
 int execute(char *input);

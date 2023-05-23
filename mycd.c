@@ -102,12 +102,12 @@ void change_prevdir(char **cmd)
 
 	prev_dir = _getenv("OLDPWD");
 	if (prev_dir == NULL)
-	
-		cold_pwd = _strdup(cwd);
-	else
-		cold_pwd = _strdup(prev_dir);
 
-	_setenv("OLDPWD",cwd, 1);
+	cold_pwd = _strdup(cwd);
+	else
+	cold_pwd = _strdup(prev_dir);
+
+	_setenv("OLDPWD", cwd, 1);
 
 	if (chdir(prev_dir) == -1)
 	_setenv("PWD", cwd, 1);
@@ -119,14 +119,14 @@ void change_prevdir(char **cmd)
 	write(STDOUT_FILENO, "\n", 1);
 
 	free(cwd);
-	if(prev_dir)
+	if (prev_dir)
 	free(cold_pwd);
 	chdir(p_pwd);
 }
 
 /**
  * changeto_dir - changes to the specified directory
- * @dir: the specified directory
+ * @cmd: the specified directory
  *
  */
 void changeto_dir(char **cmd)
@@ -136,9 +136,9 @@ void changeto_dir(char **cmd)
 	char *cp_pwd, *newpwd;
 
 	if (getcwd(pwd, BUFSIZE) == NULL)
-        {
-        perror("getcwd");
-        return;
+	{
+	perror("getcwd");
+	return;
 	}
 	if (chdir(dir) != 0)
 	{
@@ -147,12 +147,12 @@ void changeto_dir(char **cmd)
 	}
 	cp_pwd = strdup(pwd);
 	if (_setenv("OLDPWD", cp_pwd, 1) != 0)
-        {
-        perror("setenv");
-        return;
-        }
+	{
+	perror("setenv");
+	return;
+	}
 	newpwd = _strdup(dir);
-	if (_setenv("PWD", newpwd, 1) != 0) 
+	if (_setenv("PWD", newpwd, 1) != 0)
 	{
 	perror("setenv");
 	return;
@@ -164,6 +164,7 @@ void changeto_dir(char **cmd)
 }
 /**
  * Errormes - prints error message
+ * @command: the command
  *
  */
 void Errormes(char *command)
@@ -173,31 +174,4 @@ void Errormes(char *command)
 	strcpy(error, command);
 	strcat(error, ": No such file or directory\n");
 	write(STDOUT_FILENO, error, _strlen(error));
-}
-
-/**
- * current_dir - changes to the current directory
- * @cmd: unused
- *
- */
-void current_dir(char **cmd)
-{
-	char pwd[BUFSIZE];
-	char *cp_pwd;
-	(void)cmd;
-
-	getcwd(pwd, sizeof(pwd));
-
-	cp_pwd = _strdup(pwd);
-	_setenv("OLDPWD", cp_pwd, 1);
-	free(cp_pwd);
-
-	if (chdir(".") == -1)
-	{
-	perror("chdir");
-	return;
-	}
-
-	getcwd(pwd, sizeof(pwd));
-	_setenv("PWD", pwd, 1);
 }

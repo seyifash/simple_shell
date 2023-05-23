@@ -34,7 +34,7 @@ return (0);
 char *_strtok(char *src, const char *delim)
 {
 
-	static char *backup = NULL;
+	static char *backup;
 	char *token = NULL;
 	char *end = NULL;
 
@@ -48,7 +48,9 @@ char *_strtok(char *src, const char *delim)
 	}
 	src += _strspn(src, delim);
 	while (*src != '\0' && is_delim(*src, delim))
-        ++src;
+	{
+	++src;
+	}
 	if (*src == '\0')
 	{
 	backup = src;

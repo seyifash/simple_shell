@@ -91,26 +91,42 @@ void _memcpy(void *dest, void *src, unsigned int n)
  */
 char *exspaces(char *input)
 {
-        char *rmsp = NULL;
-        int i;
-        int j;
-        int len = _strlen(input);
+	char *rmsp = NULL;
+	int i;
+	int j;
+	int len = _strlen(input);
 
-        rmsp = malloc(len + 1);
-        if (rmsp == NULL)
-        {
-        perror("malloc");
-        return (NULL);
-        }
-        j = 0;
-        for (i = 0; i < len; i++)
-        {
-        if (input[i] != ' ')
-        {
-        rmsp[j] = input[i];
+	rmsp = malloc(len + 1);
+	if (rmsp == NULL)
+	{
+	perror("malloc");
+	return (NULL);
+	}
+	j = 0;
+	for (i = 0; i < len; i++)
+	{
+	if (input[i] != ' ')
+	{
+	rmsp[j] = input[i];
 	j++;
 	}
 	}
 	rmsp[j] = '\0';
 	return (rmsp);
+}
+/**
+ * printerror - prints an error if the execute function fails
+ * @cmd: the command that failed
+ *
+ * Return: returns the ascii 1 if it fails to print
+ */
+char *printerror(char *cmd)
+{
+	print("./hsh");
+	print(": ");
+	print(cmd);
+	print(": ");
+	print("No such file or directory");
+	_putchar('\n');
+	return ("1");
 }
