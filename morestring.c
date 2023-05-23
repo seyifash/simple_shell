@@ -92,5 +92,6 @@ if (arr == NULL)
 return (NULL);
 for (f = 0; str[f]; f++)
 arr[f] = str[f];
+arr[f] = '\0';
 return (arr);
 }

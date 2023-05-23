@@ -12,8 +12,9 @@ typedef struct {
     int count;
 } CommandInfo;
 
+int checktoks(char **tokens, int num_tokens);
 void execute_commands_alternatively(char *input);
-int check_same_logical_operator(char *input);
+void check_same_logical_operator(char *input);
 void execute_sequentially(char *input);
 void freememory_pp(char **ptr);
 char **token_cmd(char *line);
@@ -137,26 +138,37 @@ void handle_commands(char *input)
 	}
 
 }
-int check_same_logical_operator(char *input) {
+void check_same_logical_operator(char *input) {
 	char* delim = "||";
+	int argc = 0;
+	char *token[100]
 	char* cmd_cpy = strdup(input);
-	int same_operator = 1; // Assume same operator initially
-
 
 	char* cmd_token = strtok(cmd_cpy, delim);
-	 char* first_command = strdup(cmd_token);
-	while (cmd_token != NULL) {
+	while (cmd_token != NULL) 
+	{
+	tokens[argc++] = cmd_token;
 	cmd_token = strtok(NULL, delim);
-	if (strcmp(cmd_token, first_command) != 0) {
-        same_operator = 0; // Different command  found
-        break;
-        }
 	}
 
-	free(cmd_cpy);
-	return same_operator;
-}
+	if (checktoks(tokens, 1)) {
+        printf("All tokens are the same.\n");
+    } else {
+        printf("Tokens are different.\n");
+    }
 
+         free(cmd_cpy);
+}
+int checktoks(char **tokens, int num_tokens) {
+    if (tokens[index] != NULL) {
+        if (strcmp(tokens[0], tokens[index]) == 0) {
+            return checktoks(tokens, index + 1);
+        } else {
+            return 0;
+        }
+    }
+    return 1;
+}
 char *getlocation(char *command)
 {
         char *path, *path_copy, *path_token, *file_path;

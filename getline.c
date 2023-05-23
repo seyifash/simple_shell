@@ -15,13 +15,11 @@ ssize_t _getline(char **line, size_t *n, int fd)
 	size_t new_size = 0;
 	char  *new_line = NULL;
 
-	if (line == NULL || (int)*n >= 0)
-	{
-	*n = BUFSIZE;
-	*line = malloc(*n);
-	if (*line == NULL)
+	if (line == NULL || n == NULL)
 	return (-1);
-	}
+	*n = BUFSIZE;
+	*line = buffer;
+
 	while (1)
 	{
 	rd = read(fd, buffer, BUFSIZE);
@@ -86,25 +84,33 @@ void _memcpy(void *dest, void *src, unsigned int n)
 	char_dest[i] = char_src[i];
 }
 /**
- * is_accessible - checks if a file is accessible
- * @actual_command: the file to be checked
+ * exspaces - a function that removes spaces from the string
+ * @input: the string toremove spaces from
  *
- * Return: 0 0n success and 1 0n failure
+ * Return: returs strings without space
  */
-int is_accessible(char *actual_command)
+char *exspaces(char *input)
 {
-	if (access(actual_command, F_OK) == 0)
-	{
-	if (access(actual_command, R_OK | X_OK) == 0)
-	{
-	return (1);
+        char *rmsp = NULL;
+        int i;
+        int j;
+        int len = _strlen(input);
+
+        rmsp = malloc(len + 1);
+        if (rmsp == NULL)
+        {
+        perror("malloc");
+        return (NULL);
+        }
+        j = 0;
+        for (i = 0; i < len; i++)
+        {
+        if (input[i] != ' ')
+        {
+        rmsp[j] = input[i];
+	j++;
 	}
-	else
-	{
-	return (0);
 	}
-	}
-	return (0);
+	rmsp[j] = '\0';
+	return (rmsp);
 }
-
-

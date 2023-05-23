@@ -105,7 +105,7 @@ char **token_cmd(char *line)
 
 	for(i = 0; token != NULL; i++)
 	{
-	cmd_toks[i] = malloc(sizeof(char) * _strlen(token));
+	cmd_toks[i] = malloc(sizeof(char) * (_strlen(token) + 1));
 	_strcpy(cmd_toks[i], token);
 	token = _strtok(NULL, delim);
 	}

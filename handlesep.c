@@ -6,9 +6,9 @@
  */
 void execute_sep(char *input)
 {
-	char* delim = ";";
-	char* cmd_cpy = _strdup(input);
-	char* cmd_token = _strtok(cmd_cpy, delim);
+	char *delim = ";";
+	char *cmd_cpy = _strdup(input);
+	char *cmd_token = _strtok(cmd_cpy, delim);
 
 	while (cmd_token != NULL)
 	{
@@ -22,35 +22,35 @@ void execute_sep(char *input)
  * execute - executes commands entered
  * @cmd: the command
  *
- * Return: returns 0 on success 
+ * Return: returns 0 on success
  */
 int execute(char *cmd)
 {
-	char **argv;
+	char **md;
 	char *command = NULL;
 	char *actual_command = NULL;
 	int status;
-	
 	pid_t pid = fork();
+
 	if (pid == 0)
 	{
-	argv = token_cmd(cmd);
+	md = token_cmd(cmd);
 
-	command = argv[0];
+	command = md[0];
 	actual_command = getlocation(command);
-	execve(actual_command, argv, environ);
+	execve(actual_command, md, environ);
 	perror("Execution failed");
 	exit(1);
-	} 
+	}
 	else if (pid > 0)
 	{
 	waitpid(pid, &status, 0);
-	return WEXITSTATUS(status);
-	} 
-	else 
+	return (WEXITSTATUS(status));
+	}
+	else
 	{
 	perror("Fork failed");
-	return -1;
+	return (-1);
 	}
 }
 /**
@@ -60,22 +60,21 @@ int execute(char *cmd)
  */
 void execute_and(char *input)
 {
-	char* delim = "&&";
-	char* cmd_cpy = _strdup(input);
-	char* cmd_token = _strtok(input, delim);
+	char *delim = "&&";
+	char *cmdt = _strtok(input, delim);
+	int prest = 0;
 
-	int prev_status = 0;
-
-	while (cmd_token != NULL)
+	while (cmdt != NULL)
 	{
-	if (prev_status == 0)
+	if (prest == 0)
 	{
-	if (execute(cmd_token) == 0) {
-	prev_status = 0;
+	if (execute(cmdt) == 0)
+	{
+	prest = 0;
 	}
 	else
 	{
-	prev_status = 1;
+	prest = 1;
 	}
 	}
 	else
@@ -83,10 +82,9 @@ void execute_and(char *input)
 	break;
 	}
 
-	cmd_token = _strtok(NULL, delim);
+	cmdt = _strtok(NULL, delim);
 	}
 
-	free(cmd_cpy);
 }
 /**
  * execute_or - executes th cmd with the OR logical operators
@@ -95,17 +93,31 @@ void execute_and(char *input)
  */
 void execute_or(char *input)
 {
-	char* delim = "||";
-	char* cmd_cpy = _strdup(input);
-	char* cmd_token = _strtok(cmd_cpy, delim);
+	char *delim = "||\n";
+	char *space;
+	char *cmd_toks;
+	char *pretok = NULL;
+	int presame = 0;
+	int ini_exec;
 
-	while (cmd_token != NULL)
+	cmd_toks = _strtok(input, delim);
+	while (cmd_toks != NULL)
 	{
-	execute(cmd_token);
-	cmd_token = _strtok(NULL, delim);
+	space = exspaces(cmd_toks);
+	if (presame && pretok != NULL &&
+	_strcmp(prevtok, space) == 0 && ini_exec == 0)
+	{
+	break;
+	}
+	else
+	{
+	ini_exec = execute(cmd_toks);
+	}
+	presame = 1;
+	pretok = space;
+	cmd_toks = _strtok(NULL, delim);
 	}
 
-	free(cmd_cpy);
 }
 /**
  * handle_cmd - handles and executes command
@@ -114,56 +126,21 @@ void execute_or(char *input)
  */
 void handle_cmd(char *input)
 {
-	if (_strchr(input, ';') != NULL) 
+
+	char *copy = _strdup(input);
+
+	if (_strchr(input, ';') != NULL)
 	{
 	execute_sep(input);
 	}
-	else if (_strstr(input, "&&") != NULL) 
+	else if (_strstr(input, "||") != NULL)
+	{
+	execute_or(copy);
+	free(copy);
+	}
+	else
 	{
 	execute_and(input);
 	}
-	else if (_strstr(input, "||") != NULL) 
-	{
-	if (checkcmdsame(input)) 
-	{
-	execute(input);
-	} 
-	else 
-	{
-	execute_or(input);
-	}	
-	}
-	else 
-	{
-	execute(input);
-	}
-}
-/**
- * checkcmdsame - check if the commands are the same
- * @input: the cmd entered
- *
- * Return: returns  1 if cmd is same
- */
-int checkcmdsame(char *input) 
-{
-	char *delim = "||";
-	char *cmd_cpy = _strdup(input);
-	char *cmd_token;
-	char *first_command = NULL;
-	int same_commands = 1;
 
-	cmd_token = _strtok(cmd_cpy, delim);
-	first_command = _strdup(cmd_token);
-	
-	while (cmd_token != NULL) {
-	if (_strcmp(cmd_token, first_command) != 0) {
-	same_commands = 0;
-	break;
-	}
-	cmd_token = _strtok(NULL, delim);
-	}
-
-	free(cmd_cpy);
-	free(first_command);
-	return same_commands;
 }

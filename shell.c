@@ -58,27 +58,30 @@ int status = 0;
 size_t n = 0;
 char **tokens = NULL;
 ssize_t lineread;
+
 while (1)
 {
 if (isatty(STDIN_FILENO))
 print_prompt1();
 lineread = _getline(&line, &n, STDIN_FILENO);
 if (lineread == -1)
+{
+free(line);
 return (-1);
+}
 cmd_cpy = _strdup(line);
 tokens = token_cmd(cmd_cpy);
+free(cmd_cpy);
 builtin_func = check_builtins(tokens);
 if (builtin_func)
 {
 status = execute_builtin(builtin_func, tokens, status);
-free(cmd_cpy);
 continue;
 }
 else
 {
 status = execute_external(line);
 }
-free(cmd_cpy);
 freememory_pp(tokens);
 }
 free(line);

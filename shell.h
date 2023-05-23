@@ -16,8 +16,8 @@ void print_prompt2(void);
 
 extern char **environ;
 
+
 int shell();
-int is_accessible(char *actual_command);
 char *_getenv(const char *name);
 char **token_cmd(char *line);
 int execute(char *input);
@@ -28,7 +28,7 @@ char *getlocation(char *command);
 void execute_or(char *input);
 void execute_and(char *input);
 void execute_sep(char *input);
-int checkcmdsame(char *input);
+char *exspaces(char *input);
 void aliasvalue(char *aliasName);
 void setalias(char **tokens);
 int aliasfunc(char **token, int status, char *filename);
@@ -70,7 +70,8 @@ typedef struct  builtin_t{
         int (*function_ptr)(char **, int, char *);
 } builtin_t;
 
-
+void Errormes(char *command);
+void changeto_dir(char **dir);
 int builtin_unset(char **cmd, int status, char *filename);
 int  env_cmd(char **cmd, int status, char *filename);
 int exit_cmd(char **cmd, int status, char *filename);
@@ -97,5 +98,6 @@ int _setenv(char *name, char *value, int overwrite);
 #define BUFSIZE 1024
 #define ALEN 100
 #define VLEN 100
+#define MAX_TOKENS 100
 
 #endif

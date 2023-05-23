@@ -12,7 +12,8 @@ void all_aliases()
 {
 	char output[1000];
 	int i;
-    
+
+	output[0] = '\0';
 	for (i = 0; i < aliasCount; i++)
 	{
 	_strcat(output, aliases[i]);
@@ -20,7 +21,7 @@ void all_aliases()
 	_strcat(output, values[i]);
 	_strcat(output, "\n");
 	}
-	write(STDOUT_FILENO, output, strlen(output));
+	write(STDOUT_FILENO, output, _strlen(output));
 }
 /**
  * aliasfunc - checks for argument after the alias command
@@ -112,7 +113,7 @@ void aliasvalue(char *aliasName)
 	_strcpy(output, aliasName);	
 	_strcat(output, "=");
 	_strcat(output, aliasValue);
-	write(STDOUT_FILENO, output, strlen(output));
+	write(STDOUT_FILENO, output, _strlen(output));
 	write(STDOUT_FILENO, "\n", 1);
 	}
 }

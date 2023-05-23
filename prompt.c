@@ -36,7 +36,7 @@ unsigned int is_delim(char c, const char *delim)
  */
 char *_strtok(char *src, const char *delim)
 {
-	static char *backup;
+	static char *backup = NULL;
 	char *token = NULL;
 	char *end = NULL;
 
