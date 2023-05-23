@@ -1,41 +1,39 @@
 #include "shell.h"
-
 /**
- * print_prompt1 - prints the prompt for user
- *
- */
-
+* print_prompt1 - prints the prompt for user
+*
+*/
 void print_prompt1(void)
 {
-	write(STDERR_FILENO, "$ ", 2);
+write(STDERR_FILENO, "$ ", 2);
 }
 /**
- * is_delim - checks if the character in the string is a delimiter
- * @c: the characcter to be checked
- * @delim: the delimiting character to be checaked
- *
- * Return: returns 1 if the delimiter is found, else 0;
- */
+* is_delim - checks if the character in the string is a delimiter
+* @c: the characcter to be checked
+* @delim: the delimiting character to be checaked
+*
+* Return: returns 1 if the delimiter is found, else 0;
+*/
 unsigned int is_delim(char c, const char *delim)
 {
-
-	while (*delim != '\0')
-	{
-	if (c == *delim)
-	return (1);
-	delim++;
-	}
-	return (0);
+while (*delim != '\0')
+{
+if (c == *delim)
+return (1);
+delim++;
+}
+return (0);
 }
 /**
- * _strtok - tokenizes a string
- * @src: the string to be tokenized
- * @delim: the delimiter
- *
- * Return: returns the tokenized string
- */
+* _strtok - tokenizes a string
+* @src: the string to be tokenized
+* @delim: the delimiter
+*
+* Return: returns the tokenized string
+*/
 char *_strtok(char *src, const char *delim)
 {
+
 	static char *backup = NULL;
 	char *token = NULL;
 	char *end = NULL;
@@ -69,39 +67,33 @@ char *_strtok(char *src, const char *delim)
 	token = src;
 	return (token);
 }
-
 /**
- * free_space_p - free a pointer
- *
- * @ptr: pointer to free
- */
+* free_space_p - free a pointer
+*
+* @ptr: pointer to free
+*/
 void free_space_p(char *ptr)
 {
-	if (ptr != NULL)
-	{
-	free(ptr);
-	ptr = NULL;
-	}
-	ptr = NULL;
+if (ptr != NULL)
+{
+free(ptr);
+ptr = NULL;
 }
-
-
+ptr = NULL;
+}
 /**
- * freememory_pp - frees a double pointer
- *
- * @ptr: Double pointer to free
- */
-
+* freememory_pp - frees a double pointer
+*
+* @ptr: Double pointer to free
+*/
 void freememory_pp(char **ptr)
 {
-	int i;
-
-	if (ptr == NULL)
-	return ;
-
-	for (i = 0; ptr[i] != NULL; i++)
-	{
-	free(ptr[i]);
-	}
-	free(ptr); 
+int i;
+if (ptr == NULL)
+return;
+for (i = 0; ptr[i] != NULL; i++)
+{
+free(ptr[i]);
+}
+free(ptr);
 }
