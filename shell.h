@@ -10,6 +10,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <fcntl.h>
+#include <stdbool.h>
 
 void print_prompt1(void);
 void print_prompt2(void);

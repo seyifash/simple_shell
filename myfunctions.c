@@ -76,7 +76,7 @@ char **token_cmd(char *line)
 
 	char *cmd_cpy = NULL;
 	char *token = NULL;
-	char *delim = " \n";
+	char *delim = " \n\t\r\a";
 	int args = 0, i;
 	char **cmd_toks = NULL;
 

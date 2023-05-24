@@ -55,6 +55,7 @@ for (i = 0; environ[i]; i++)
 print(environ[i]);
 _putchar('\n');
 }
+
 return (0);
 }
 /**
@@ -122,5 +123,6 @@ else if (_setenv(cmd[1], cmd[2], 1) == -1)
 write(STDERR_FILENO, "Failed to set environmental variable\n", 36);
 return (-1);
 }
+
 return (0);
 }

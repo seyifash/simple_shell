@@ -56,20 +56,20 @@ int _strncmp(char *s1, char *s2, int n)
  */
 int _strspn(char *str, const char *acc)
 {
-	int i, j, bool;
+	int i, j, found;
 
 	for (i = 0; *(str + i) != '\0'; i++)
 	{
-	bool = 1;
+	found = 0;
 	for (j = 0; *(acc + j) != '\0'; j++)
 	{
 	if (*(str + i) == *(acc + j))
 	{
-	bool = 0;
+	found = 1;
 	break;
 	}
 	}
-	if (bool == 1)
+	if (found == 0)
 	break;
 	}
 	return (i);
