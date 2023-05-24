@@ -58,12 +58,12 @@ int status = 0;
 size_t n = 0;
 char **tokens = NULL;
 ssize_t lineread;
-bool from_pipe = false;
+bool pipe = false;
 
-while (1 & !from_pipe)
+while (1 && !pipe)
 {
 if (isatty(STDIN_FILENO) == 0)
-from_pipe = true;
+pipe = true;
 print_prompt1();
 lineread = _getline(&line, &n, STDIN_FILENO);
 if (lineread == -1)
@@ -80,10 +80,12 @@ if (builtin_func)
 status = execute_builtin(builtin_func, tokens, status);
 continue;
 }
+else
+{
 status = execute_external(line);
-freememory_pp(tokens);
 }
 freememory_pp(tokens);
+}
 free(line);
 return (0);
 }

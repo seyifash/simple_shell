@@ -63,7 +63,11 @@ void change_homedir(char **cmd)
 	char initial_dir[BUFSIZE];
 	(void)cmd;
 
-	getcwd(initial_dir, sizeof(initial_dir));
+	if (getcwd(initial_dir, sizeof(initial_dir)) == NULL)
+	{
+	perror("getcwd");
+	return;
+	}
 	dup_pwd = _strdup(initial_dir);
 	homedir = _getenv("HOME");
 	if (homedir == NULL)
@@ -72,15 +76,23 @@ void change_homedir(char **cmd)
 	free(dup_pwd);
 	return;
 	}
-
 	if (chdir(homedir) == -1)
 	{
-	write(STDERR_FILENO, "cd: Failed to change directory\n", 31);
+	perror("chdir");
 	free(dup_pwd);
 	return;
 	}
-	_setenv("OLDPWD", dup_pwd, 1);
-	_setenv("PWD", homedir, 1);
+	if (_setenv("OLDPWD", dup_pwd, 1) == -1)
+	{
+	perror("_setenv");
+	free(dup_pwd);
+	return;
+	}
+	if (_setenv("PWD", homedir, 1) == -1)
+	{
+	perror("_setenv");
+	return;
+	}
 	free(dup_pwd);
 }
 
@@ -142,7 +154,7 @@ void changeto_dir(char **cmd)
 	}
 	if (chdir(dir) != 0)
 	{
-	Errormes(cmd[0]);
+	Errormes(cmd[1]);
 	return;
 	}
 	cp_pwd = strdup(pwd);

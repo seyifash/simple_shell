@@ -58,6 +58,7 @@ envc++;
 new_environ = malloc((envc + 2) * sizeof(char *));
 if (new_environ == NULL)
 {
+write(STDERR_FILENO, "Error: Memory allocation failed\n", 32);
 return (-1);
 }
 for (i = 0; i < envc; i++)
@@ -84,6 +85,7 @@ int find_exist(char *name, char *value, int overwrite)
 char *env;
 size_t len_name = _strlen(name);
 char **dupenv = environ;
+
 while (*dupenv != NULL)
 {
 if (_strncmp(name, *dupenv, len_name) == 0 && (*dupenv)[len_name] == '=')
@@ -92,6 +94,7 @@ if (overwrite)
 {
 env = new_var(name, value);
 *dupenv = env;
+free(env);
 return (0);
 }
 else

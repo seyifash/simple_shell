@@ -52,6 +52,7 @@ int execute(char *cmd)
 	perror("Fork failed");
 	return (-1);
 	}
+	freememory_pp(md);
 }
 /**
  * execute_and - executes commands with the AND logical operator

@@ -17,9 +17,11 @@ void print_prompt2(void);
 
 extern char **environ;
 
-
 int shell(void);
+char *errunset(char *cmd);
+void getcwderr(char *message);
 char *printerror(char *cmd);
+void printenv(void);
 char *_getenv(const char *name);
 char **token_cmd(char *line);
 int execute(char *input);

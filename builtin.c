@@ -105,22 +105,16 @@ exit(status);
 */
 int built_setenv(char **cmd, int status, char *filename)
 {
-char **env = NULL;
+
 (void)status;
 (void)filename;
 if (cmd[1] == NULL || cmd[2] == NULL)
 {
-env = environ;
-while (*env != NULL)
-{
-write(STDOUT_FILENO, *env, _strlen(*env));
-write(STDOUT_FILENO, "\n", 1);
-env++;
-}
+printenv();
 }
 else if (_setenv(cmd[1], cmd[2], 1) == -1)
 {
-write(STDERR_FILENO, "Failed to set environmental variable\n", 36);
+getcwderr("Failed to set environmental variable");
 return (-1);
 }
 

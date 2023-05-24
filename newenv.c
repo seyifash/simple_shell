@@ -55,9 +55,14 @@ int builtin_unset(char **cmd, int status, char *filename)
 	(void)status;
 	(void)filename;
 
+	if (cmd[1] == NULL)
+	{
+	write(STDOUT_FILENO, "./hsh: unsetenv: Invalid argument\n", 34);
+	return (-1);
+	}
 	if (_unsetenv(cmd[1]) == -1)
 	{
-	write(STDERR_FILENO, "Error: Failed to unset environment variable\n", 45);
+	getcwderr("unable to unset environment");
 	return (-1);
 	}
 	return (0);
@@ -73,18 +78,64 @@ void current_dir(char **cmd)
 	char *cp_pwd;
 	(void)cmd;
 
-	getcwd(pwd, sizeof(pwd));
+	if (getcwd(pwd, sizeof(pwd)) == NULL)
+	{
+	getcwderr("Failed to get current directory");
+	return;
+	}
 
 	cp_pwd = _strdup(pwd);
-	_setenv("OLDPWD", cp_pwd, 1);
+	if (_setenv("OLDPWD", cp_pwd, 1) == -1)
+	{
+	getcwderr("Failed to set environment variable");
+	free(cp_pwd);
+	return;
+	}
 	free(cp_pwd);
 
 	if (chdir(".") == -1)
 	{
-	perror("chdir");
+	getcwderr("Failed to change directory");
 	return;
 	}
 
-	getcwd(pwd, sizeof(pwd));
-	_setenv("PWD", pwd, 1);
+	if (getcwd(pwd, sizeof(pwd)) == NULL)
+	{
+	getcwderr("Failed to get current directory");
+	return;
+	}
+	if (_setenv("PWD", pwd, 1) == -1)
+	{
+	getcwderr("Failed to set environment variable");
+	return;
+	}
+}
+/**
+ * errunset - error message if unset cmd fails
+ * @cmd: the command entered
+ *
+ * Return: returns the error message
+ */
+char *errunset(char *cmd)
+{
+	print("./hsh");
+	print(": ");
+	print(cmd);
+	print(": ");
+	print("unable to unset environmental variable");
+	_putchar('\n');
+	return ("1");
+}
+/**
+ * getcwderr - get errors if the getcwd function returns NULL
+ * @message: message to be printed
+ *
+ */
+void getcwderr(char *message)
+{
+	size_t message_len = strlen(message);
+	char newline = '\n';
+
+	write(STDERR_FILENO, message, message_len);
+	write(STDERR_FILENO, &newline, 1);
 }

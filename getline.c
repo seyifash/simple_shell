@@ -50,22 +50,28 @@ ssize_t _getline(char **line, size_t *n, int fd)
 	return (totalread);
 }
 /**
- * executeid - function that executes the given command
- * @cmd: the command to be executed
+ * printenv - prints environ variables
  *
  */
-void executeid(char *cmd)
+void printenv(void)
 {
-	char **argv;
-	char *command = NULL, *actual_command = NULL;
+char **env = environ;
+size_t len;
+char *curr;
+while (*env != NULL)
+{
+len = 0;
+curr = *env;
+while (*curr != '\0')
+{
+len++;
+curr++;
+}
+write(STDOUT_FILENO, *env, len);
+write(STDOUT_FILENO, "\n", 1);
 
-	argv = token_cmd(cmd);
-	command = argv[0];
-	actual_command = getlocation(command);
-	execve(actual_command, argv, environ);
-	freememory_pp(argv);
-	free(actual_command);
-	free(cmd);
+env++;
+}
 }
 /**
  * _memcpy - copies info
