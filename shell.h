@@ -17,7 +17,7 @@ void print_prompt2(void);
 extern char **environ;
 
 
-int shell();
+int shell(void);
 char *printerror(char *cmd);
 char *_getenv(const char *name);
 char **token_cmd(char *line);
@@ -40,7 +40,7 @@ char *_memset(char *s, char b, unsigned int n);
 int _strlen(char *s);
 char *_strchr(const char *str, int c);
 char *_strcpy(char *dest, char *src);
-char* _strstr(const char* haystack, const char* needle);
+char *_strstr(const char *haystack, const char *needle);
 char *_strdup(char *str);
 int _atoi(char *s);
 int _isalpha(char c);
@@ -56,15 +56,16 @@ int _strcmp(char *s1, char *s2);
 
 
 /**
- * struct builtin_t structure for builrin commands
+ * struct builtin_t - structure for builrin commands
  * @cmd: the command's name
- * @c: the appropriate function to act on command
+ * @function_ptr: the appropriate function to act on command
  */
 
-typedef struct  builtin_t{
+typedef struct  builtin_t
+{
 
-        char *cmd;
-        int (*function_ptr)(char **, int, char *);
+	char *cmd;
+	int (*function_ptr)(char **, int, char *);
 } builtin_t;
 
 void Errormes(char *command);
@@ -85,7 +86,7 @@ void change_homedir(char **cmd);
 unsigned int is_delim(char c, const char *delim);
 char *_strtok(char *src, const char *delim);
 ssize_t _getline(char **lineptr, size_t *n, int fd);
-int find_exist( char *name, char *value, int overwrite);
+int find_exist(char *name, char *value, int overwrite);
 char *new_var(char *name, char *value);
 int _setenv(char *name, char *value, int overwrite);
 

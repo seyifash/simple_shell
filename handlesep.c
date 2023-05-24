@@ -127,16 +127,13 @@ void execute_or(char *input)
 void handle_cmd(char *input)
 {
 
-	char *copy = _strdup(input);
-
 	if (_strchr(input, ';') != NULL)
 	{
 	execute_sep(input);
 	}
 	else if (_strstr(input, "||") != NULL)
 	{
-	execute_or(copy);
-	free(copy);
+	execute_or(input);
 	}
 	else
 	{
