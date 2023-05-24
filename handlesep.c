@@ -30,14 +30,14 @@ int execute(char *cmd)
 	char *command = NULL;
 	char *actual_command = NULL;
 	int status;
-	pid_t pid = fork();
+	pid_t pid;
 
+	pid = fork();
 	if (pid == 0)
 	{
 	md = token_cmd(cmd);
-
-	command = md[0];
-	actual_command = getlocation(command);
+        command = md[0];
+        actual_command = getlocation(command);
 	execve(actual_command, md, environ);
 	printerror(cmd);
 	exit(1);
@@ -53,6 +53,7 @@ int execute(char *cmd)
 	return (-1);
 	}
 	freememory_pp(md);
+
 }
 /**
  * execute_and - executes commands with the AND logical operator

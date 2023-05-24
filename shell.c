@@ -53,7 +53,7 @@ return (status);
 int shell(void)
 {
 int (*builtin_func)(char **, int, char *);
-char *line = NULL;
+char *line = NULL, *cmd_cpy = NULL;
 int status = 0;
 size_t n = 0;
 char **tokens = NULL;
@@ -71,7 +71,9 @@ if (lineread == -1)
 free(line);
 return (-1);
 }
-tokens = token_cmd(line);
+cmd_cpy = _strdup(line);
+tokens = token_cmd(cmd_cpy);
+free(cmd_cpy);
 if (tokens == NULL || tokens[0] == NULL)
 {
 freememory_pp(tokens);
