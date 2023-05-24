@@ -36,8 +36,8 @@ int execute(char *cmd)
 	if (pid == 0)
 	{
 	md = token_cmd(cmd);
-        command = md[0];
-        actual_command = getlocation(command);
+	command = md[0];
+	actual_command = getlocation(command);
 	execve(actual_command, md, environ);
 	printerror(cmd);
 	exit(1);

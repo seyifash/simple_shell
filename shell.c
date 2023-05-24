@@ -59,7 +59,6 @@ size_t n = 0;
 char **tokens = NULL;
 ssize_t lineread;
 bool pipe = false;
-
 while (1 && !pipe)
 {
 if (isatty(STDIN_FILENO) == 0)
@@ -79,7 +78,6 @@ if (tokens == NULL || tokens[0] == NULL)
 freememory_pp(tokens);
 continue;
 }
-
 builtin_func = check_builtins(tokens);
 if (builtin_func)
 {
