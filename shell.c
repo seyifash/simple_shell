@@ -90,5 +90,7 @@ status = execute_external(line);
 }
 freememory_pp(tokens);
 }
+free(line);
 return (0);
 }
+
