@@ -18,20 +18,11 @@ void print_prompt2(void);
 extern char **environ;
 
 int shell(void);
-char *errunset(char *cmd);
-void getcwderr(char *message);
-char *printerror(char *cmd);
-void printenv(void);
 char *_getenv(const char *name);
 char **token_cmd(char *line);
 int execute(char *input);
-void executeid(char *argv);
-void handle_cmd(char *input);
-void cmdsep_exec(char *input);
+void executeid(char *line);
 char *getlocation(char *command);
-void execute_or(char *input);
-void execute_and(char *input);
-void execute_sep(char *input);
 char *exspaces(char *input);
 
 int _strncmp(char *s1, char *s2, int n);
@@ -71,8 +62,6 @@ typedef struct  builtin_t
 	int (*function_ptr)(char **, int, char *);
 } builtin_t;
 
-void Errormes(char *command);
-void changeto_dir(char **dir);
 int builtin_unset(char **cmd, int status, char *filename);
 int  env_cmd(char **cmd, int status, char *filename);
 int exit_cmd(char **cmd, int status, char *filename);
@@ -81,17 +70,8 @@ builtin_t is_builtin(char *cmd);
 int (*check_builtins(char **))(char **, int, char *);
 void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
 int cd_cmd(char **cmd, int status, char *filename);
-void current_dir(char **cmd);
-void change_givendir(char **cmd);
-void change_prevdir(char **cmd);
-void change_homedir(char **cmd);
-
-unsigned int is_delim(char c, const char *delim);
-char *_strtok(char *src, const char *delim);
-ssize_t _getline(char **lineptr, size_t *n, int fd);
-int find_exist(char *name, char *value, int overwrite);
-char *new_var(char *name, char *value);
-int _setenv(char *name, char *value, int overwrite);
+int execmd(char **argv);
+char **splittoks(char *line);
 
 
 #define TRUE 1

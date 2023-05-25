@@ -1,24 +1,5 @@
 #include "shell.h"
 /**
- * execute_sep - execute the commands with semicolon
- * @input: the command to be executed
- *
- */
-void execute_sep(char *input)
-{
-	char *delim = ";";
-	char *cmd_cpy = _strdup(input);
-	char *cmd_token = _strtok(cmd_cpy, delim);
-
-	while (cmd_token != NULL)
-	{
-	execute(cmd_token);
-	cmd_token = _strtok(NULL, delim);
-	}
-
-	free(cmd_cpy);
-}
-/**
  * execute - executes commands entered
  * @cmd: the command
  *
@@ -28,18 +9,16 @@ int execute(char *cmd)
 {
 	char **md;
 	char *command = NULL;
-	char *actual_command = NULL;
 	int status;
 	pid_t pid;
 
 	pid = fork();
 	if (pid == 0)
 	{
-	md = token_cmd(cmd);
+	md = splittoks(cmd);
 	command = md[0];
-	actual_command = getlocation(command);
-	execve(actual_command, md, environ);
-	printerror(cmd);
+	execve(command, md, environ);
+	perror("Error");
 	exit(1);
 	}
 	else if (pid > 0)
@@ -52,94 +31,61 @@ int execute(char *cmd)
 	perror("Fork failed");
 	return (-1);
 	}
+
 	freememory_pp(md);
-
 }
 /**
- * execute_and - executes commands with the AND logical operator
- * @input: the commmand entered
- *
+ * execmd - executes the command
+ * @argv: the command to execute
  */
-void execute_and(char *input)
+int execmd(char **argv)
 {
-	char *delim = "&&";
-	char *cmdt = _strtok(input, delim);
-	int prest = 0;
+	char *command = NULL;
 
-	while (cmdt != NULL)
+	if (argv)
 	{
-	if (prest == 0)
+	command = argv[0];
+	if (execve(command, argv, NULL) == -1)
 	{
-	if (execute(cmdt) == 0)
-	{
-	prest = 0;
-	}
-	else
-	{
-	prest = 1;
+	perror("./shell");
+	freememory_pp(argv);
+	exit(EXIT_FAILURE);
 	}
 	}
-	else
-	{
-	break;
-	}
-
-	cmdt = _strtok(NULL, delim);
-	}
-
+	freememory_pp(argv);
+	return (0);
 }
 /**
- * execute_or - executes th cmd with the OR logical operators
- * @input: command entered
+ * splittoks - split commands into individuat strings
+ * @line: the command to split
  *
+ * Return: returns the tokenized string
  */
-void execute_or(char *input)
+char **splittoks(char *line)
 {
-	char *delim = "||\n";
-	char *space;
-	char *cmd_toks;
-	char *pretok = NULL;
-	int presame = 0;
-	int ini_exec;
+	char *token;
+	char **toks;
+	int numtoks = 0;
+	char *delim = " \t\n\r\a";
+	int i;
+	char *cmd_cpy;
 
-	cmd_toks = _strtok(input, delim);
-	while (cmd_toks != NULL)
+	cmd_cpy = _strdup(line);
+	token = strtok(cmd_cpy, delim);
+	while (token != NULL)
 	{
-	space = exspaces(cmd_toks);
-	if (presame && pretok != NULL &&
-	_strcmp(pretok, space) == 0 && ini_exec == 0)
+	numtoks++;
+	token = strtok(NULL, delim);
+	}
+	toks = malloc(sizeof(char *) * (numtoks + 1));
+	token = strtok(line, delim);
+	for (i = 0; token != NULL; i++)
 	{
-	break;
+	toks[i] = malloc(sizeof(char) * (_strlen(token) + 1));
+	strcpy(toks[i], token);
+	token = strtok(NULL, delim);
 	}
-	else
-	{
-	ini_exec = execute(cmd_toks);
-	}
-	presame = 1;
-	pretok = space;
-	cmd_toks = _strtok(NULL, delim);
-	}
-
-}
-/**
- * handle_cmd - handles and executes command
- * @input: the cmd entered
- *
- */
-void handle_cmd(char *input)
-{
-
-	if (_strchr(input, ';') != NULL)
-	{
-	execute_sep(input);
-	}
-	else if (_strstr(input, "||") != NULL)
-	{
-	execute_or(input);
-	}
-	else
-	{
-	execute_and(input);
-	}
-
+	toks[i] = NULL;
+	free(cmd_cpy);
+	return (toks);
 }
