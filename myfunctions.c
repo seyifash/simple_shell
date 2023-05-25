@@ -79,7 +79,7 @@ if (path)
 {
 path_copy = _strdup(path);
 command_length = _strlen(command);
-path_token = _strtok(path_copy, ":");
+path_token = strtok(path_copy, ":");
 while (path_token != NULL)
 {
 directory_length = _strlen(path_token);
@@ -89,14 +89,14 @@ _strcat(file_path, "/");
 _strcat(file_path, command);
 _strcat(file_path, "\0");
 if (stat(file_path, &buffer) == 0)
-{gi
-free(path_copy); this
+{
+free(path_copy);
 return (file_path);
 }
 else
 {
 free(file_path);
-path_token = _strtok(NULL, ":");
+path_token = strtok(NULL, ":");
 }
 }
 free(path_copy);
@@ -106,4 +106,6 @@ return (command);
 }
 return (NULL);
 }
+return (NULL);
 }
+

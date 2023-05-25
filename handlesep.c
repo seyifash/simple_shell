@@ -8,7 +8,7 @@
 int execute(char *cmd)
 {
 	char **md;
-	char *command = NULL;
+	char *cmdpath = NULL;
 	int status;
 	pid_t pid;
 
@@ -16,10 +16,13 @@ int execute(char *cmd)
 	if (pid == 0)
 	{
 	md = splittoks(cmd);
-	command = md[0];
-	execve(command, md, environ);
+	cmdpath = getlocation(md[0]);
+	if (execve(cmdpath, md, environ) == -1)
+	{
 	perror("Error");
+	freememory_pp(md);
 	exit(1);
+	}
 	}
 	else if (pid > 0)
 	{
@@ -33,6 +36,7 @@ int execute(char *cmd)
 	}
 
 	freememory_pp(md);
+	return (0);
 }
 /**
  * execmd - executes the command
