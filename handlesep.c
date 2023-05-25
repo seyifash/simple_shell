@@ -2,12 +2,12 @@
 /**
  * execute - executes commands entered
  * @cmd: the command
+ * @line: the commands entered
  *
  * Return: returns 0 on success
  */
-int execute(char *cmd)
+int execute(char **cmd, char *line)
 {
-	char **md;
 	char *cmdpath = NULL;
 	int status;
 	pid_t pid;
@@ -15,14 +15,16 @@ int execute(char *cmd)
 	pid = fork();
 	if (pid == 0)
 	{
-	md = splittoks(cmd);
-	cmdpath = getlocation(md[0]);
-	if (execve(cmdpath, md, environ) == -1)
+	cmdpath = getlocation(cmd[0]);
+	if (cmdpath == NULL)
 	{
 	perror("Error");
-	freememory_pp(md);
-	exit(1);
+	freememory_pp(cmd);
+	free(line);
+	exit(0);
 	}
+	else
+	execve(cmdpath, cmd, environ);
 	}
 	else if (pid > 0)
 	{
@@ -35,7 +37,7 @@ int execute(char *cmd)
 	return (-1);
 	}
 
-	freememory_pp(md);
+	freememory_pp(cmd);
 	return (0);
 }
 /**

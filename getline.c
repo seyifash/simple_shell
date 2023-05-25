@@ -1,6 +1,19 @@
 #include "shell.h"
 
 /**
+ * handlesig - function that stops ctrl c
+ * @sigfunc: unused
+ *
+ */
+
+void handlesig(int sigfunc)
+{
+	(void)sigfunc;
+
+	write(STDOUT_FILENO, "\n", 1);
+	write(STDOUT_FILENO, "$ ", 2);
+}
+/**
  * _memcpy - copies info
  * @dest: destination
  * @src: source

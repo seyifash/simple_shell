@@ -10,6 +10,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <fcntl.h>
+#include <signal.h>
 #include <stdbool.h>
 
 void print_prompt1(void);
@@ -20,10 +21,11 @@ extern char **environ;
 int shell(void);
 char *_getenv(const char *name);
 char **token_cmd(char *line);
-int execute(char *input);
+int execute(char **input, char *line);
 void executeid(char *line);
 char *getlocation(char *command);
 char *exspaces(char *input);
+void handlesig(int sigfunc);
 
 int _strncmp(char *s1, char *s2, int n);
 size_t _strcspn(const char *str, const char *delim);

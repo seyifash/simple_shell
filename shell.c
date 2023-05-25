@@ -8,26 +8,36 @@
 
 int main(void)
 {
-char *line = NULL;
-size_t n = 0;
-char *prompt = "$ ";
-bool pipe = false;
-ssize_t numread;
-while (1 & !pipe)
-{
-if (isatty(STDIN_FILENO) == 0)
-pipe = true;
-write(STDOUT_FILENO, prompt, 2);
-numread =  getline(&line, &n, stdin);
-if (numread == -1)
-{
-print("exiting shell...\n");
-free(line);
-return (-1);
-}
+	char *line = NULL;
+	size_t n = 0;
+	char **token = NULL;
+	char *prompt = "$ ";
+	ssize_t numread;
 
-execute(line);
-}
-free(line);
-return (0);
+	signal(SIGINT, handlesig);
+	while (1)
+	{
+	if (isatty(STDIN_FILENO))
+	write(STDOUT_FILENO, prompt, 2);
+	numread =  getline(&line, &n, stdin);
+	if (numread == -1)
+	{
+	free(line);
+	if (isatty(STDIN_FILENO))
+	print("\n");
+	exit(0);
+	}
+	if (*line == '\n' || *line == '\0')
+	continue;
+	token = splittoks(line);
+	if (!token || !token[0])
+	{
+	freememory_pp(token);
+	continue;
+	}
+	execute(token, line);
+	freememory_pp(token);
+	}
+	free(line);
+	return (0);
 }
