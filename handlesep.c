@@ -37,6 +37,7 @@ int execute(char *cmd)
 /**
  * execmd - executes the command
  * @argv: the command to execute
+ * Return: return 0 on success
  */
 int execmd(char **argv)
 {
