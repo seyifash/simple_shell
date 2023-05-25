@@ -27,6 +27,7 @@ int main(void)
 	if (numread == -1)
 	{
 	print("exiting shell...\n");
+	free(line);
 	return (-1);
 	}
 	token = splittoks(line);
@@ -46,7 +47,6 @@ int main(void)
 	exit(EXIT_FAILURE);
 	}
 	freememory_pp(token);
-	free(line);
 	}
 	free(line);
 	return (0);
