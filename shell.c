@@ -22,7 +22,7 @@ while (1)
 {
 if (isatty(STDIN_FILENO))
 write(STDOUT_FILENO, prompt, 2);
-numread =  getline(&line, &n, stdin);
+numread =  _getline(&line, &n, stdin);
 if (numread == -1)
 {
 free(line);
