@@ -2,12 +2,15 @@
 
 /**
  * main - runs a shell loop
+ * @ac: unused
+ * @argv: the filename
  *
  * Return: Always 0 on success
  */
 
-int main(void)
+int main(int ac __attribute__((unused)), char *argv[])
 {
+	int (*builtin_func)(char **, char *, char *);
 	char *line = NULL;
 	size_t n = 0;
 	char **token = NULL;
@@ -32,6 +35,13 @@ int main(void)
 	token = splittoks(line);
 	if (!token || !token[0])
 	{
+	freememory_pp(token);
+	continue;
+	}
+	builtin_func = check_builtins(token);
+	if (builtin_func)
+	{
+	builtin_func(token, line, argv[0]);
 	freememory_pp(token);
 	continue;
 	}

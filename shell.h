@@ -61,17 +61,17 @@ typedef struct  builtin_t
 {
 
 	char *cmd;
-	int (*function_ptr)(char **, int, char *);
+	int (*function_ptr)(char **, char *, char *);
 } builtin_t;
 
-int builtin_unset(char **cmd, int status, char *filename);
-int  env_cmd(char **cmd, int status, char *filename);
-int exit_cmd(char **cmd, int status, char *filename);
-int built_setenv(char **cmd, int status, char *filename);
+int builtin_unset(char **cmd, char *line, char *filename);
+int  env_cmd(char **cmd, char *line, char *filename);
+int exit_cmd(char **cmd, char *line, char *filename);
+int built_setenv(char **cmd, char *line, char *filename);
 builtin_t is_builtin(char *cmd);
-int (*check_builtins(char **))(char **, int, char *);
+int (*check_builtins(char **))(char **, char *, char *);
 void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
-int cd_cmd(char **cmd, int status, char *filename);
+int cd_cmd(char **cmd, char *line, char *filename);
 int execmd(char **argv);
 char **splittoks(char *line);
 

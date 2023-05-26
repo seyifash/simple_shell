@@ -1,16 +1,15 @@
-#include "shells.h"
+#include "shell.h"
 /**
 * is_builtin - checks if the command given is a built in function
 * @cmd: command entered
 * Return: the position of cmd in the builtin array
 */
-builtin_t is_builtin(char *cmd)
+builtin_t if_builtin(char *cmd)
 {
 int i;
 builtin_t builtincommands[] = {
 {"exit", exit_cmd},
 {"env", env_cmd},
-{"cd", cd_cmd},
 {NULL, NULL}
 };
 for (i = 0; builtincommands[i].cmd != NULL; i++)
@@ -24,9 +23,9 @@ return (builtincommands[i]);
 *
 * Return: the appropriate function to be executed, else NULL
 */
-int (*check_builtins(char **cmd))(char **, int, char *)
+int (*check_builtins(char **cmd))(char **, char *, char *)
 {
-builtin_t func = is_builtin(cmd[0]);
+builtin_t func = if_builtin(cmd[0]);
 if (func.cmd)
 return (func.function_ptr);
 return (NULL);
@@ -39,11 +38,11 @@ return (NULL);
 *
 * Return: Always 0
 */
-int env_cmd(char **cmd, int status, char *filename)
+int env_cmd(char **cmd, char *line, char *filename)
 {
 int i;
 (void)cmd;
-(void)status;
+(void)line;
 (void) filename;
 for (i = 0; environ[i]; i++)
 {
@@ -61,12 +60,14 @@ return (0);
 * Return: exit with the status code given or previous execution
 * status code
 */
-int exit_cmd(char **cmd, int status, char *filename)
+int exit_cmd(char **cmd, char *line, char *filename)
 {
 int i = 0;
-if (!cmd[i])
+int status = 0;
+if (!cmd[1])
 {
 freememory_pp(cmd);
+free(line);
 exit(status);
 }
 while (cmd[1][i])
@@ -86,5 +87,6 @@ i++;
 }
 status = _atoi(cmd[1]);
 freememory_pp(cmd);
+free(line);
 exit(status);
 }
