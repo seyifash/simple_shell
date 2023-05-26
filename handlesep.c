@@ -97,11 +97,11 @@ char **splittoks(char *line)
 	return (toks);
 }
 /**
- * assign_line - assigns line
- * @lineptr: the buffer
- * @nl: size of what to read
+ * updateline - assigns line
+ * @line: the buffer
+ * @n: size of what to read
  * @buffer: initial buffer
- * @jb: the total numberof chars read
+ * @chread: the total numberof chars read
  *
  */
 void updateline(char **line, size_t *n, char *buffer, size_t chread)
@@ -131,7 +131,7 @@ void updateline(char **line, size_t *n, char *buffer, size_t chread)
 /**
  * _getline - custom getline function
  * @lineptr: the line buffer
- * @nl: size of buffer to read
+ * @n: size of buffer to read
  * @strm: the file to read from
  * Return: returns the total number of chars read
  */
