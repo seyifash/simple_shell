@@ -96,6 +96,14 @@ char **splittoks(char *line)
 	free(cmd_cpy);
 	return (toks);
 }
+/**
+ * assign_line - assigns line
+ * @lineptr: the buffer
+ * @nl: size of what to read
+ * @buffer: initial buffer
+ * @jb: the total numberof chars read
+ *
+ */
 void assign_line(char **lineptr, size_t *nl, char *buffer, size_t jb)
 {
 	if (*lineptr == NULL)
@@ -120,7 +128,13 @@ void assign_line(char **lineptr, size_t *nl, char *buffer, size_t jb)
 	free(buffer);
 	}
 }
-	
+/**
+ * _getline - custom getline function
+ * @lineptr: the line buffer
+ * @nl: size of buffer to read
+ * @strm: the file to read from
+ * Return: returns the total number of chars read
+ */
 ssize_t _getline(char **lineptr, size_t *nl, FILE *strm)
 {
 	int idx;
