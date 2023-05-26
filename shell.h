@@ -26,6 +26,7 @@ void executeid(char *line);
 char *getlocation(char *command);
 char *exspaces(char *input);
 void handlesig(int sigfunc);
+ssize_t _getline(char **line, size_t *n, FILE *strm);
 
 int _strncmp(char *s1, char *s2, int n);
 size_t _strcspn(const char *str, const char *delim);
@@ -61,20 +62,20 @@ typedef struct  builtin_t
 {
 
 	char *cmd;
-	int (*function_ptr)(char **, char *, char *);
+	int (*function_ptr)(char **, char *, char *, int);
 } builtin_t;
 
-int builtin_unset(char **cmd, char *line, char *filename);
-int  env_cmd(char **cmd, char *line, char *filename);
-int exit_cmd(char **cmd, char *line, char *filename);
-int built_setenv(char **cmd, char *line, char *filename);
+int builtin_unset(char **cmd, char *line, char *filename, int status);
+int  env_cmd(char **cmd, char *line, char *filename, int status);
+int exit_cmd(char **cmd, char *line, char *filename, int status);
+int built_setenv(char **cmd, char *line, char *filename, int status);
 builtin_t cmpbuiltin(char *cmd);
-int (*ifbuiltins(char **))(char **, char *, char *);
+int (*ifbuiltins(char **))(char **, char *, char *, int status);
 void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
 int cd_cmd(char **cmd, char *line, char *filename);
 int execmd(char **argv);
 char **splittoks(char *line);
-
+void assign_line(char **lineptr, size_t *nl, char *buffer, size_t jb);
 
 #define TRUE 1
 #define FALSE 0

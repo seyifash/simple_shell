@@ -96,3 +96,70 @@ char **splittoks(char *line)
 	free(cmd_cpy);
 	return (toks);
 }
+void assign_line(char **lineptr, size_t *nl, char *buffer, size_t jb)
+{
+	if (*lineptr == NULL)
+	{
+	if (jb > BUFSIZE)
+		*nl = jb;
+	else
+	*nl = BUFSIZE;
+	*lineptr = buffer;
+	}
+	else if (*nl < jb)
+	{
+	if (jb > BUFSIZE)
+	*nl = jb;
+	else
+	*nl = BUFSIZE;
+	*lineptr = buffer;
+	}
+	else
+	{
+	_strcpy(*lineptr, buffer);
+	free(buffer);
+	}
+}
+	
+ssize_t _getline(char **lineptr, size_t *nl, FILE *strm)
+{
+	int idx;
+	static ssize_t inp;
+	ssize_t rval;
+	char *buffer;
+	char t = 'z';
+
+	if (inp == 0)
+	fflush(strm);
+	else
+	return (-1);
+	inp = 0;
+
+	buffer = malloc(sizeof(char) * BUFSIZE);
+	if (buffer == 0)
+	return (-1);
+	while (t != '\n')
+	{
+	idx = read(STDIN_FILENO, &t, 1);
+	if (idx == -1 || (idx == 0 && inp == 0))
+	{
+	free(buffer);
+	return (-1);
+	}
+	if (idx == 0 && inp != 0)
+	{
+	inp++;
+	break;
+	}
+	if (inp >= BUFSIZE)
+	buffer = _realloc(buffer, inp, inp + 1);
+	buffer[inp] = t;
+	inp++;
+	}
+	buffer[inp] = '\0';
+	assign_line(lineptr, nl, buffer, inp);
+	rval = inp;
+	if (idx != 0)
+	inp = 0;
+	return (rval);
+}

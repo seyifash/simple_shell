@@ -10,12 +10,13 @@
 
 int main(int ac __attribute__((unused)), char *argv[])
 {
-	int (*builtin_func)(char **, char *, char *);
+	int (*builtin_func)(char **, char *, char *, int);
 	char *line = NULL;
 	size_t n = 0;
 	char **token = NULL;
 	char *prompt = "$ ";
 	ssize_t numread;
+	int status = 0;
 
 	signal(SIGINT, handlesig);
 	while (1)
@@ -41,11 +42,11 @@ int main(int ac __attribute__((unused)), char *argv[])
 	builtin_func = ifbuiltins(token);
 	if (builtin_func)
 	{
-	builtin_func(token, line, argv[0]);
+	builtin_func(token, line, argv[0], status);
 	freememory_pp(token);
 	continue;
 	}
-	execute(token, line);
+	status = execute(token, line);
 	freememory_pp(token);
 	}
 	free(line);
