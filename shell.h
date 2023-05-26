@@ -75,7 +75,7 @@ void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
 int cd_cmd(char **cmd, char *line, char *filename);
 int execmd(char **argv);
 char **splittoks(char *line);
-void assign_line(char **lineptr, size_t *nl, char *buffer, size_t jb);
+void updateline(char **line, size_t *n, char *buffer, size_t chread);
 
 #define TRUE 1
 #define FALSE 0

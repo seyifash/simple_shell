@@ -104,27 +104,27 @@ char **splittoks(char *line)
  * @jb: the total numberof chars read
  *
  */
-void assign_line(char **lineptr, size_t *nl, char *buffer, size_t jb)
+void updateline(char **line, size_t *n, char *buffer, size_t chread)
 {
-	if (*lineptr == NULL)
+	if (*line == NULL)
 	{
-	if (jb > BUFSIZE)
-		*nl = jb;
+	if (chread > BUFSIZE)
+		*n = chread;
 	else
-	*nl = BUFSIZE;
-	*lineptr = buffer;
+	*n = BUFSIZE;
+	*line = buffer;
 	}
-	else if (*nl < jb)
+	else if (*n < chread)
 	{
-	if (jb > BUFSIZE)
-	*nl = jb;
+	if (chread > BUFSIZE)
+	*n = chread;
 	else
-	*nl = BUFSIZE;
-	*lineptr = buffer;
+	*n = BUFSIZE;
+	*line = buffer;
 	}
 	else
 	{
-	_strcpy(*lineptr, buffer);
+	_strcpy(*line, buffer);
 	free(buffer);
 	}
 }
@@ -135,45 +135,45 @@ void assign_line(char **lineptr, size_t *nl, char *buffer, size_t jb)
  * @strm: the file to read from
  * Return: returns the total number of chars read
  */
-ssize_t _getline(char **lineptr, size_t *nl, FILE *strm)
+ssize_t _getline(char **lineptr, size_t *n, FILE *strm)
 {
-	int idx;
-	static ssize_t inp;
-	ssize_t rval;
+	int rd;
+	static ssize_t chread;
+	ssize_t totalr;
 	char *buffer;
-	char t = 'z';
+	char flow = 'z';
 
-	if (inp == 0)
+	if (chread == 0)
 	fflush(strm);
 	else
 	return (-1);
-	inp = 0;
+	chread = 0;
 
 	buffer = malloc(sizeof(char) * BUFSIZE);
 	if (buffer == 0)
 	return (-1);
-	while (t != '\n')
+	while (flow != '\n')
 	{
-	idx = read(STDIN_FILENO, &t, 1);
-	if (idx == -1 || (idx == 0 && inp == 0))
+	rd = read(STDIN_FILENO, &flow, 1);
+	if (rd == -1 || (rd == 0 && chread == 0))
 	{
 	free(buffer);
 	return (-1);
 	}
-	if (idx == 0 && inp != 0)
+	if (rd == 0 && chread != 0)
 	{
-	inp++;
+	chread++;
 	break;
 	}
-	if (inp >= BUFSIZE)
-	buffer = _realloc(buffer, inp, inp + 1);
-	buffer[inp] = t;
-	inp++;
+	if (chread >= BUFSIZE)
+	buffer = _realloc(buffer, chread, chread + 1);
+	buffer[chread] = flow;
+	chread++;
 	}
-	buffer[inp] = '\0';
-	assign_line(lineptr, nl, buffer, inp);
-	rval = inp;
-	if (idx != 0)
-	inp = 0;
-	return (rval);
+	buffer[chread] = '\0';
+	updateline(lineptr, n, buffer, chread);
+	totalr = chread;
+	if (rd != 0)
+	chread = 0;
+	return (totalr);
 }
