@@ -38,7 +38,7 @@ int main(int ac __attribute__((unused)), char *argv[])
 	freememory_pp(token);
 	continue;
 	}
-	builtin_func = check_builtins(token);
+	builtin_func = ifbuiltins(token);
 	if (builtin_func)
 	{
 	builtin_func(token, line, argv[0]);

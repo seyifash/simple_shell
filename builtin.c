@@ -1,10 +1,10 @@
 #include "shell.h"
 /**
-* is_builtin - checks if the command given is a built in function
+* cmpbuiltin - checks if the command given is a built in function
 * @cmd: command entered
 * Return: the position of cmd in the builtin array
 */
-builtin_t if_builtin(char *cmd)
+builtin_t cmpbuiltin(char *cmd)
 {
 int i;
 builtin_t builtincommands[] = {
@@ -18,14 +18,14 @@ return (builtincommands[i]);
 return (builtincommands[i]);
 }
 /**
-* check_builtins - if command is a builtin command
+* ifbuiltins - if command is a builtin command
 * @cmd: an array of command and its argument
 *
 * Return: the appropriate function to be executed, else NULL
 */
-int (*check_builtins(char **cmd))(char **, char *, char *)
+int (*ifbuiltins(char **cmd))(char **, char *, char *)
 {
-builtin_t func = if_builtin(cmd[0]);
+builtin_t func = cmpbuiltin(cmd[0]);
 if (func.cmd)
 return (func.function_ptr);
 return (NULL);
@@ -33,7 +33,7 @@ return (NULL);
 /**
 * env_cmd - builtin implementation of env command
 * @cmd: unused
-* @status: the status code
+* @line: the status code
 * @filename: name of file
 *
 * Return: Always 0
@@ -54,7 +54,7 @@ return (0);
 /**
 * exit_cmd - builtin implementation of the exit command
 * @cmd: an array of given commands and its argument
-* @status: the status code
+* @line: the status code
 * @filename: name of file
 *
 * Return: exit with the status code given or previous execution
