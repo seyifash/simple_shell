@@ -37,3 +37,20 @@ free(ptr[i]);
 }
 free(ptr);
 }
+/**
+* is_delim - checks if the character in the string is a delimiter
+* @c: the characcter to be checked
+* @delim: the delimiting character to be checaked
+*
+* Return: returns 1 if the delimiter is found, else 0;
+*/
+unsigned int is_delim(char c, const char *delim)
+{
+while (*delim != '\0')
+{
+if (c == *delim)
+return (1);
+delim++;
+}
+return (0);
+}

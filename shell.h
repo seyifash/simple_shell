@@ -21,6 +21,8 @@ extern char **environ;
 int shell(void);
 char *_getenv(const char *name);
 char **token_cmd(char *line);
+char *_strtok(char *src, const char *delim);
+unsigned int is_delim(char c, const char *delim);
 int execute(char **input, char *line);
 void executeid(char *line);
 char *getlocation(char *command);

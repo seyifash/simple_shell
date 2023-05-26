@@ -78,19 +78,19 @@ char **splittoks(char *line)
 	char *cmd_cpy;
 
 	cmd_cpy = _strdup(line);
-	token = strtok(cmd_cpy, delim);
+	token = _strtok(cmd_cpy, delim);
 	while (token != NULL)
 	{
 	numtoks++;
-	token = strtok(NULL, delim);
+	token = _strtok(NULL, delim);
 	}
 	toks = malloc(sizeof(char *) * (numtoks + 1));
-	token = strtok(line, delim);
+	token = _strtok(line, delim);
 	for (i = 0; token != NULL; i++)
 	{
 	toks[i] = malloc(sizeof(char) * (_strlen(token) + 1));
 	strcpy(toks[i], token);
-	token = strtok(NULL, delim);
+	token = _strtok(NULL, delim);
 	}
 	toks[i] = NULL;
 	free(cmd_cpy);

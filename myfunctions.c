@@ -109,3 +109,47 @@ return (NULL);
 return (NULL);
 }
 
+/**
+* _strtok - tokenizes a string
+* @src: the string to be tokenized
+* @delim: the delimiter
+* Return: returns tokens
+*/
+char *_strtok(char *src, const char *delim)
+{
+
+	static char *backup;
+	char *token = NULL;
+	char *end = NULL;
+
+	if (src == NULL)
+	{
+	src = backup;
+	}
+	if (src == NULL)
+	{
+	return (NULL);
+	}
+	src += _strspn(src, delim);
+	while (*src != '\0' && is_delim(*src, delim))
+	{
+	++src;
+	}
+	if (*src == '\0')
+	{
+	backup = src;
+	return (NULL);
+	}
+	end = src + _strcspn(src, delim);
+	if (*end == '\0')
+	{
+	backup = end;
+	}
+	else
+	{
+	*end = '\0';
+	backup = end + 1;
+	}
+	token = src;
+	return (token);
+}
